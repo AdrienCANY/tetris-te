@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "random": "c",
+        "audio_recording.h": "c",
+        "constants.h": "c",
+        "utils.h": "c",
+        "movable_object.h": "c",
+        "other.h": "c",
+        "match.H": "cpp",
+        "racket.h": "c"
+    }
+}
