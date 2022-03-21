@@ -15,7 +15,10 @@ typedef enum
 typedef struct 
 {
     int x, y;
-    
+    BlockColor color;
 } Block;
+
+Block* Block_Create(int x, int y, BlockColor color);
+void Block_Destroy(Block* block);
 
 #endif

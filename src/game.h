@@ -6,7 +6,7 @@
 
 typedef struct 
 {
-
+ 
 } Game;
 
 Game* Game_Create();
