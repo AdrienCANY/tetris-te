@@ -2,11 +2,12 @@
 #define GAME_H_
 
 #include "constants.h"
+#include "grid.h"
 #include <SDL.h>
 
 typedef struct 
 {
- 
+    Grid* grid;
 } Game;
 
 Game* Game_Create();

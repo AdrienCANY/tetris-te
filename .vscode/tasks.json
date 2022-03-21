@@ -18,7 +18,7 @@
                 "-lSDL2_ttf",
                 "-lSDL2_mixer",
                 "-o",
-                "${workspaceFolder}\\build\\prog.exe"
+                "${workspaceFolder}\\build\\tetriste.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"

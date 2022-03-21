@@ -1,7 +1,7 @@
 #ifndef TETRIMINO_H_
 #define TETRIMINO_H_
 
-#include "block.h"
+#include "tile_color.h"
 
 typedef enum
 {
@@ -16,18 +16,25 @@ typedef enum
 
 typedef struct 
 {
-    Block blocks[4];
+    int x, y;
+} Tile;
+
+typedef struct 
+{
+    int x, y;
+    Tile tiles[4];
+    TileColor color;
 } Tetrimino;
 
-Tetrimino* TTMN_Create(TetriminoType type);
+Tetrimino* TTMN_Create(int x, int y, TetriminoType type);
 
-Tetrimino* TTMN_CreateI();
-Tetrimino* TTMN_CreateO();
-Tetrimino* TTMN_CreateT();
-Tetrimino* TTMN_CreateL();
-Tetrimino* TTMN_CreateJ();
-Tetrimino* TTMN_CreateZ();
-Tetrimino* TTMN_CreateS();
+Tetrimino* TTMN_CreateI(int x, int y);
+Tetrimino* TTMN_CreateO(int x, int y);
+Tetrimino* TTMN_CreateT(int x, int y);
+Tetrimino* TTMN_CreateL(int x, int y);
+Tetrimino* TTMN_CreateJ(int x, int y);
+Tetrimino* TTMN_CreateZ(int x, int y);
+Tetrimino* TTMN_CreateS(int x, int y);
 
 void TTMN_Destroy(Tetrimino *ttmn);
 

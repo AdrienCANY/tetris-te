@@ -11,4 +11,8 @@
 #define FONT_SIZE_TITLE 60
 #define FONT_SIZE_TEXT 25
 
+#define GRID_HEIGHT 20
+#define GRID_WIDTH 10
+#define TILE_SIZE 20
+
 #endif
