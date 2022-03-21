@@ -14,8 +14,6 @@ typedef struct
     int y;
     TileColor *blocks;
 
-    Tile test;
-
     Tetrimino *ttmn;
 } Grid;
 
@@ -24,5 +22,6 @@ void Grid_Render(Grid *grid);
 void Grid_HandleEvent(Grid *grid, SDL_Event *e);
 void Grid_Destroy(Grid *grid);
 TileColor Grid_GetColor(Grid *grid, int x, int y);
+void Grid_DrawTile(int x, int y, TileColor color);
 
 #endif
