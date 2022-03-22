@@ -14,7 +14,8 @@ Grid* Grid_Create(int x, int y)
     grid->w = GRID_WIDTH * TILE_SIZE + 1;
     grid->h = GRID_HEIGHT * TILE_SIZE + 1;
     grid->blocks = malloc( sizeof(TileColor) * GRID_WIDTH * GRID_HEIGHT );
-    grid->ttmn = TTMN_Create(0, 0, TETRIMINO_S);
+    Tetrimino *ttmn = TTMN_Create(0, 0, TETRIMINO_S);
+    grid->player = Player_Create(ttmn);
 
     return grid;
 }
@@ -42,14 +43,7 @@ void Grid_Render(Grid *grid)
 
     // draw tetrimino
 
-    int ttmn_x = grid->ttmn->x;
-    int ttmn_y = grid->ttmn->y;
-    for(int i = 0 ; i < TETRIMINO_TILES_COUNT ; ++i)
-    {
-        int tile_x = grid->ttmn->tiles[i].x;
-        int tile_y = grid->ttmn->tiles[i].y;
-        Grid_DrawTile(ttmn_x + tile_x, ttmn_y + tile_y, grid->ttmn->color);
-    }
+    TTMN_Render(grid->player->ttmn);
 
     // unset renderer viewport
 
@@ -62,60 +56,15 @@ void Grid_Render(Grid *grid)
 
 }
 
-void Grid_DrawTile(int x, int y, TileColor color)
-{
-    switch(color)
-    {
-        case TILE_BLACK: 
-            SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
-            break;
-        case TILE_CYAN:
-            SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0xFF, 0xFF);
-            break;
-        case TILE_YELLOW:
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0x00, 0xFF);
-            break;
-        case TILE_PURPLE:
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0xFF, 0xFF);
-            break;
-        case TILE_ORANGE:
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x7F, 0x00, 0xFF);
-            break;
-        case TILE_BLUE:
-            SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
-            break;
-        case TILE_RED:
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-            break;
-        case TILE_GREEN:
-            SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-            break;
-    }
-
-    SDL_Rect rect = { x * TILE_SIZE + 1, y * TILE_SIZE + 1, TILE_SIZE - 1, TILE_SIZE - 1 };
-
-    SDL_RenderFillRect(gRenderer, &rect);
-}
-
 void Grid_Destroy(Grid *grid)
 {
     free(grid->blocks);
-    TTMN_Destroy(grid->ttmn);
+    Player_Destroy(grid->player);
     free(grid);
     grid = NULL;
 }
 
 void Grid_HandleEvent(Grid *grid, SDL_Event *e)
 {
-    if(e->type == SDL_KEYDOWN)
-    {
-        switch(e->key.keysym.sym)
-        {
-            case SDLK_UP: grid->ttmn->y--; break;
-            case SDLK_DOWN: grid->ttmn->y++; break;
-            case SDLK_LEFT: grid->ttmn->x--; break;
-            case SDLK_RIGHT: grid->ttmn->x++; break;
-            case SDLK_a: TTMN_Rotate(grid->ttmn); break;
-        }
-    }
+    TTMN_HandleEvent(grid->player, e);
 }

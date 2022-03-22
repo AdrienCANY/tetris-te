@@ -4,6 +4,7 @@
 #include "tile_color.h"
 #include "tetrimino.h"
 #include <SDL.h>
+#include "player.h"
 
 
 typedef struct 
@@ -14,7 +15,8 @@ typedef struct
     int y;
     TileColor *blocks;
 
-    Tetrimino *ttmn;
+    Player *player;
+    Tetrimino *hold;
 } Grid;
 
 Grid* Grid_Create(int x, int y);
