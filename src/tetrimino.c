@@ -167,8 +167,8 @@ void TTMN_Rotate(Tetrimino* ttmn)
             if(ttmn->tiles[i].x >= 2) ttmn->tiles[i].x -= 1;
             else ttmn->tiles[i].x -= 2;
 
-            if(ttmn->tiles[i].y >= 2) ttmn->tiles[i].y -= 1;
-            else ttmn->tiles[i].y -= 2;
+            if(ttmn->tiles[i].y >= 2) ttmn->tiles[i].y -= 0;
+            else ttmn->tiles[i].y -= 1;
         }
         else 
         {
@@ -189,8 +189,8 @@ void TTMN_Rotate(Tetrimino* ttmn)
             if(ttmn->tiles[i].x >= 0) ttmn->tiles[i].x += 1;
             else ttmn->tiles[i].x += 2;
 
-            if(ttmn->tiles[i].y >= 0) ttmn->tiles[i].y += 1;
-            else ttmn->tiles[i].y += 2;
+            if(ttmn->tiles[i].y >= 0) ttmn->tiles[i].y += 0;
+            else ttmn->tiles[i].y += 1;
         }
         else 
         {

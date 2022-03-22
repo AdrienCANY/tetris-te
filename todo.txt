@@ -1,6 +1,8 @@
 Tetrimino
 	Rotation
-	Collision
+Architecture
+TTMN	
+	Collision, placements des TTMN en bas
 Grid
 	Descente des tetriminos
 	Génération d'un nouveau tetrimino lorsque le tetrimino précédent 
