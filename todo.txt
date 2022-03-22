@@ -1,6 +1,7 @@
 Tetrimino
 	Rotation
 Architecture
+	Séparer affichage et logique de jeu
 TTMN	
 	Collision, placements des TTMN en bas
 Grid
