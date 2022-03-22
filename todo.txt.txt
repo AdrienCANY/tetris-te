@@ -1,0 +1,11 @@
+Tetrimino
+	Rotation
+	Collision
+Grid
+	Descente des tetriminos
+	Génération d'un nouveau tetrimino lorsque le tetrimino précédent 
+	est placé
+	Affichage avec et sans la grille
+	Suppression des lignes complétées
+Global
+	Score

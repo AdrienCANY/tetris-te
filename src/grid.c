@@ -44,7 +44,7 @@ void Grid_Render(Grid *grid)
 
     int ttmn_x = grid->ttmn->x;
     int ttmn_y = grid->ttmn->y;
-    for(int i = 0 ; i < 4 ; ++i)
+    for(int i = 0 ; i < TETRIMINO_TILES_COUNT ; ++i)
     {
         int tile_x = grid->ttmn->tiles[i].x;
         int tile_y = grid->ttmn->tiles[i].y;
@@ -115,6 +115,7 @@ void Grid_HandleEvent(Grid *grid, SDL_Event *e)
             case SDLK_DOWN: grid->ttmn->y++; break;
             case SDLK_LEFT: grid->ttmn->x--; break;
             case SDLK_RIGHT: grid->ttmn->x++; break;
+            case SDLK_a: TTMN_Rotate(grid->ttmn); break;
         }
     }
 }

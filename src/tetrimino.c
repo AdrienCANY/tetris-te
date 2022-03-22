@@ -1,5 +1,6 @@
 #include "tetrimino.h"
 #include <stdlib.h>
+#include "constants.h"
 
 Tetrimino* TTMN_Create(int x, int y, TetriminoType type)
 {
@@ -51,14 +52,36 @@ Tetrimino* TTMN_CreateS(int x, int y)
 
     ttmn->x = x;
     ttmn->y = y;
-
+    ttmn->type = TETRIMINO_S;
     ttmn->color = TILE_GREEN;
+
     ttmn->tiles[0] = (Tile) {0,1};
     ttmn->tiles[1] = (Tile) {0,2};
     ttmn->tiles[2] = (Tile) {1,0};
     ttmn->tiles[3] = (Tile) {1,1};
 
     return ttmn;
+}
+
+void TTMN_Rotate(Tetrimino* ttmn)
+{
+    // doesnt work for O and I
+    if(ttmn->color )
+    for(int i = 0 ; i < TETRIMINO_TILES_COUNT ; ++i)
+    {
+        // shift of referential
+        ttmn->tiles[i].x--;
+        ttmn->tiles[i].y--;
+
+        // rotation of referential
+        int temp = ttmn->tiles[i].x;
+        ttmn->tiles[i].x = - ttmn->tiles[i].y;
+        ttmn->tiles[i].y = temp;
+
+        // undo referential shift
+        ttmn->tiles[i].x++;
+        ttmn->tiles[i].y++;
+    }
 }
 
 void TTMN_Destroy(Tetrimino *ttmn)

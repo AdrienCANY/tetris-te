@@ -2,6 +2,7 @@
 #define TETRIMINO_H_
 
 #include "tile_color.h"
+#include "grid.h"
 
 typedef enum
 {
@@ -21,9 +22,11 @@ typedef struct
 
 typedef struct 
 {
+    Grid* grid;
     int x, y;
     Tile tiles[4];
     TileColor color;
+    TetriminoType type;
 } Tetrimino;
 
 Tetrimino* TTMN_Create(int x, int y, TetriminoType type);
@@ -35,6 +38,8 @@ Tetrimino* TTMN_CreateL(int x, int y);
 Tetrimino* TTMN_CreateJ(int x, int y);
 Tetrimino* TTMN_CreateZ(int x, int y);
 Tetrimino* TTMN_CreateS(int x, int y);
+
+void TTMN_Rotate(Tetrimino* ttmn);
 
 void TTMN_Move(int dX, int dY);
 
