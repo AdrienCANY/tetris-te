@@ -13,7 +13,7 @@ typedef struct
     int w;
     int x;
     int y;
-    TileColor *blocks;
+    TileColor *tiles;
 
     Player *player;
     Tetrimino *hold;
@@ -23,7 +23,8 @@ Grid* Grid_Create(int x, int y);
 void Grid_Render(Grid *grid);
 void Grid_HandleEvent(Grid *grid, SDL_Event *e);
 void Grid_Destroy(Grid *grid);
-TileColor Grid_GetColor(Grid *grid, int x, int y);
-void Grid_DrawTile(int x, int y, TileColor color);
+
+void Grid_DrawTetrimno(Grid *grid, Tetrimino *ttmn);
+void Grid_DrawTile(Grid *grid, int x, int y, TileColor color);
 
 #endif

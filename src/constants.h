@@ -15,6 +15,4 @@
 #define GRID_WIDTH 10
 #define TILE_SIZE 20
 
-#define TETRIMINO_TILES_COUNT 4
-
 #endif

@@ -2,6 +2,7 @@
 #include "constants.h"
 #include <stdlib.h>
 #include <SDL.h>
+#include "utils.h"
 #include "global.h"
 
 
@@ -13,8 +14,9 @@ Grid* Grid_Create(int x, int y)
     grid->y = y;
     grid->w = GRID_WIDTH * TILE_SIZE + 1;
     grid->h = GRID_HEIGHT * TILE_SIZE + 1;
-    grid->blocks = malloc( sizeof(TileColor) * GRID_WIDTH * GRID_HEIGHT );
-    Tetrimino *ttmn = TTMN_Create(0, 0, TETRIMINO_S);
+
+    grid->tiles = malloc( sizeof(TileColor) * GRID_WIDTH * GRID_HEIGHT );
+    Tetrimino *ttmn = TTMN_Create(0, 0, TETRIMINO_I);
     grid->player = Player_Create(ttmn);
 
     return grid;
@@ -43,7 +45,7 @@ void Grid_Render(Grid *grid)
 
     // draw tetrimino
 
-    TTMN_Render(grid->player->ttmn);
+    Grid_DrawTetrimno(grid, grid->player->ttmn);
 
     // unset renderer viewport
 
@@ -56,9 +58,11 @@ void Grid_Render(Grid *grid)
 
 }
 
+
+
 void Grid_Destroy(Grid *grid)
 {
-    free(grid->blocks);
+    free(grid->tiles);
     Player_Destroy(grid->player);
     free(grid);
     grid = NULL;
@@ -66,5 +70,19 @@ void Grid_Destroy(Grid *grid)
 
 void Grid_HandleEvent(Grid *grid, SDL_Event *e)
 {
-    TTMN_HandleEvent(grid->player, e);
+    Player_HandleEvent(grid->player, e);
+}
+
+void Grid_DrawTetrimno(Grid *grid, Tetrimino *ttmn)
+{
+    for(int i = 0 ; i < ttmn->tiles_count ; ++i)
+    {
+        Grid_DrawTile(grid, ttmn->x + ttmn->tiles[i].x, ttmn->y + ttmn->tiles[i].y, ttmn->color);
+    }
+}
+
+void Grid_DrawTile(Grid *grid, int x, int y, TileColor color)
+{
+    setRenderDrawColor(color);
+    drawTile(x, y);
 }

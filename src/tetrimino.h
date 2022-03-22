@@ -24,9 +24,9 @@ typedef struct
 {
     int x, y;
     Tile tiles[4];
+    int tiles_count;
     TileColor color;
     TetriminoType type;
-    SDL_Scancode controls[5];
 } Tetrimino;
 
 Tetrimino* TTMN_Create(int x, int y, TetriminoType type);
@@ -40,6 +40,7 @@ Tetrimino* TTMN_CreateZ(int x, int y);
 Tetrimino* TTMN_CreateS(int x, int y);
 
 void TTMN_Rotate(Tetrimino* ttmn);
+void TTMN_Move(Tetrimino* ttmn, int dX, int dY);
 
 void TTMN_Destroy(Tetrimino *ttmn);
 

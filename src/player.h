@@ -10,14 +10,13 @@ typedef enum
     CONTROL_DOWN,
     CONTROL_LEFT,
     CONTROL_RIGHT,
-    CONTROL_HOLD,
     CONTROL_ROTATE
 } Control;
 
 
 typedef struct Player {
     Tetrimino *ttmn; 
-    SDL_Scancode controls[6];
+    SDL_Scancode controls[5];
     int player_number;
 } Player;
 
