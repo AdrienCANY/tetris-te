@@ -37,12 +37,6 @@ SDL_Texture *Grid_GetTexture(Grid* grid, int x, int y, int tile_size, int show_g
 
     // Set texture as render target
     SDL_SetRenderTarget(gRenderer, texture);
-    
-    // draw outline
-
-    SDL_Rect outline = {0,0, w, h};
-    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderDrawRect(gRenderer, &outline);
 
     // if asked, draw grid
 
@@ -62,6 +56,12 @@ SDL_Texture *Grid_GetTexture(Grid* grid, int x, int y, int tile_size, int show_g
 
     // draw tiles
     // TODO
+
+    // draw outline
+
+    SDL_Rect outline = {0,0, w, h};
+    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderDrawRect(gRenderer, &outline);
 
 
     // unset render target

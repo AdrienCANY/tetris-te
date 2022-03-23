@@ -16,7 +16,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     
     Tetrimino* ttmn = TTMN_CreateRand(0, 0);
     logic->player = Player_Create(ttmn);
-
+    logic->hold = NULL;
     logic -> queue = calloc( queue_size, sizeof(Tetrimino*) );
 
     logic->score = 0;
