@@ -1,13 +1,12 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "constants.h"
-#include "grid.h"
 #include <SDL.h>
+#include "game_logic.h"
 
 typedef struct 
 {
-    Grid* grid;
+    GameLogic *gamelogic;
 } Game;
 
 Game* Game_Create();

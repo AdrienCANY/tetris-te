@@ -1,88 +1,72 @@
 #include "grid.h"
-#include "constants.h"
-#include <stdlib.h>
-#include <SDL.h>
-#include "utils.h"
+#include <stdlib.h> 
 #include "global.h"
+#include <SDL.h>
 
-
-Grid* Grid_Create(int x, int y)
+Grid* Grid_Create(int rows, int columns)
 {
     Grid *grid = malloc(sizeof(Grid));
-    
-    grid->x = x;
-    grid->y = y;
-    grid->w = GRID_WIDTH * TILE_SIZE + 1;
-    grid->h = GRID_HEIGHT * TILE_SIZE + 1;
 
-    grid->tiles = malloc( sizeof(TileColor) * GRID_WIDTH * GRID_HEIGHT );
-    Tetrimino *ttmn = TTMN_Create(0, 0, TETRIMINO_I);
-    grid->player = Player_Create(ttmn);
+    grid->rows = rows;
+    grid->columns = columns;
+    grid->tiles = calloc(rows * columns, sizeof(TileColor));
 
     return grid;
 }
 
 
-void Grid_Render(Grid *grid)
+TileColor *Grid_GetTile(int x, int y)
 {
-    // Set render view port
-
-    SDL_Rect outline = {grid->x, grid->y, grid->w, grid->h};
-    SDL_RenderSetViewport(gRenderer, &outline);
-
-    // draw grid's inner lines
-
-    SDL_SetRenderDrawColor(gRenderer, 50, 50, 50, 255);
-    
-    for(int i = TILE_SIZE ; i < outline.w ; i += TILE_SIZE)
-    {
-        SDL_RenderDrawLine(gRenderer, i, 0, i, outline.h - 1);
-    }
-    for(int i = TILE_SIZE ; i < outline.h ; i += TILE_SIZE)
-    {
-        SDL_RenderDrawLine(gRenderer, 0, i, outline.w - 1, i);
-    }
-
-    // draw tetrimino
-
-    Grid_DrawTetrimno(grid, grid->player->ttmn);
-
-    // unset renderer viewport
-
-    SDL_RenderSetViewport(gRenderer, NULL);
-
-    // draw grid outline in white
-    
-    SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
-    SDL_RenderDrawRect(gRenderer, &outline);
 
 }
-
-
 
 void Grid_Destroy(Grid *grid)
 {
     free(grid->tiles);
-    Player_Destroy(grid->player);
+
     free(grid);
     grid = NULL;
 }
 
-void Grid_HandleEvent(Grid *grid, SDL_Event *e)
+SDL_Texture *Grid_GetTexture(Grid* grid, int x, int y, int tile_size, int show_grid)
 {
-    Player_HandleEvent(grid->player, e);
-}
+    // Create Blank Texture
+    int w = grid->columns * tile_size + (show_grid?1:0);
+    int h = grid->rows * tile_size + (show_grid?1:0);
+    SDL_Texture *texture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, w, h);
 
-void Grid_DrawTetrimno(Grid *grid, Tetrimino *ttmn)
-{
-    for(int i = 0 ; i < ttmn->tiles_count ; ++i)
+    // Set texture as render target
+    SDL_SetRenderTarget(gRenderer, texture);
+    
+    // draw outline
+
+    SDL_Rect outline = {0,0, w, h};
+    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderDrawRect(gRenderer, &outline);
+
+    // if asked, draw grid
+
+    if( show_grid )
     {
-        Grid_DrawTile(grid, ttmn->x + ttmn->tiles[i].x, ttmn->y + ttmn->tiles[i].y, ttmn->color);
+        SDL_SetRenderDrawColor(gRenderer, 0x30, 0x30, 0x30, 0xFF);
+        for(int i = tile_size ; i < w ; i += tile_size)
+        {
+            SDL_RenderDrawLine(gRenderer, i, 0, i, h - 1);
+        }
+        for(int j = tile_size ; j < h ; j += tile_size)
+        {
+            SDL_RenderDrawLine(gRenderer, 0, j, w - 1, j);
+        }
     }
-}
 
-void Grid_DrawTile(Grid *grid, int x, int y, TileColor color)
-{
-    setRenderDrawColor(color);
-    drawTile(x, y);
+
+    // draw tiles
+    // TODO
+
+
+    // unset render target
+    SDL_SetRenderTarget(gRenderer, NULL);
+
+    // return texture
+    return texture;
 }

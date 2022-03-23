@@ -15,6 +15,8 @@ typedef enum
     TETRIMINO_S
 } TetriminoType;
 
+#define TETRIMINO_TYPE_COUNT 7
+
 typedef struct 
 {
     int x, y;
@@ -30,6 +32,7 @@ typedef struct
 } Tetrimino;
 
 Tetrimino* TTMN_Create(int x, int y, TetriminoType type);
+Tetrimino* TTMN_CreateRand(int x, int y);
 
 Tetrimino* TTMN_CreateI(int x, int y);
 Tetrimino* TTMN_CreateO(int x, int y);

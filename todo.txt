@@ -1,7 +1,26 @@
-Tetrimino
-	Rotation
 Architecture
-	Séparer affichage et logique de jeu
+	-> faire une class game Logic pour remplacer la mal-nommée 
+		classe actuelle "Grid"
+		GameLogic = { Grid* grid, Player p, TTMN hold, TTMN queue[] }
+		Grid = { rowCount, colCount, color[] }
+	-> chaque classe n'est que logique
+	-> Chaque classe a une fonction render où elle reçoit tous les paramètres
+		nécessaires à son rendu (ex pour grid : x, y, taille cellule, affichage ou non lignes intérieures)
+
+-> Remarque: sinon, on peut juste créer une fonction getTexture,
+	et on place après dans l'entité de rendu.
+	on fait des accesseurs dans gamelogic pour récup ces textures dans la page.
+	ou alors, chaque entité stock sa texture en local et ne l'update qu'au besoin
+	l'entité de rendu ne fait que récup la texture
+
+	-> dans le code de la page, on fait les appels aux fonctions de rendus
+	
+	-> dans un premier temps, on refresh tout à chaque frame
+		mais on peut envisager un monde où l'entité de rendu conserve les textures
+		et ne met à jour que lorsque c'est nécessaire
+		
+	-> dans un premier temps, l'entité de rendu sera la page où on joue
+
 TTMN	
 	Collision, placements des TTMN en bas
 Grid

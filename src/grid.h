@@ -2,29 +2,23 @@
 #define GRID_H_
 
 #include "tile_color.h"
-#include "tetrimino.h"
 #include <SDL.h>
-#include "player.h"
 
 
 typedef struct 
 {
-    int h;
-    int w;
-    int x;
-    int y;
+    // logic properties
+    int rows;
+    int columns;
     TileColor *tiles;
-
-    Player *player;
-    Tetrimino *hold;
 } Grid;
 
-Grid* Grid_Create(int x, int y);
-void Grid_Render(Grid *grid);
-void Grid_HandleEvent(Grid *grid, SDL_Event *e);
+Grid* Grid_Create(int rows, int columns);
+TileColor *Grid_GetTile(int x, int y);
 void Grid_Destroy(Grid *grid);
+SDL_Texture *Grid_GetTexture(Grid* grid, int x, int y, int tile_size, int show_grid);
 
-void Grid_DrawTetrimno(Grid *grid, Tetrimino *ttmn);
-void Grid_DrawTile(Grid *grid, int x, int y, TileColor color);
+
+
 
 #endif

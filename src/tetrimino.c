@@ -18,6 +18,12 @@ Tetrimino* TTMN_Create(int x, int y, TetriminoType type)
     }
 }
 
+Tetrimino* TTMN_CreateRand(int x, int y)
+{
+    TetriminoType type = (TetriminoType) rand() % TETRIMINO_TYPE_COUNT;
+    return TTMN_Create(x, y, type);
+}
+
 Tetrimino* TTMN_CreateI(int x, int y)
 {
     Tetrimino *ttmn = malloc(sizeof(Tetrimino));
@@ -199,10 +205,6 @@ void TTMN_Rotate(Tetrimino* ttmn)
         }
 
     }
-
-    // rotate
-
-    // undo referential shift
 }
 
 void TTMN_Destroy(Tetrimino *ttmn)

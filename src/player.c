@@ -26,13 +26,17 @@ void Player_Load(Player *player, Tetrimino *ttmn)
 {
     if(player->ttmn != NULL)
         TTMN_Destroy(player->ttmn);
+        
     player->ttmn = ttmn;
 }
 
 void Player_Destroy(Player* player)
 {
     player_count--;
-    TTMN_Destroy(player->ttmn);
+
+    if(player->ttmn != NULL)
+        TTMN_Destroy(player->ttmn);
+    
     free(player);
     player = NULL;
 }

@@ -15,7 +15,7 @@ typedef enum
 
 
 typedef struct Player {
-    Tetrimino *ttmn; 
+    Tetrimino *ttmn;
     SDL_Scancode controls[5];
     int player_number;
 } Player;
@@ -24,5 +24,7 @@ typedef struct Player {
 Player* Player_Create(Tetrimino *ttmn);
 void Player_Destroy(Player* player);
 void Player_HandleEvent(Player *player, SDL_Event *e);
+
+void Player_Load(Player *player, Tetrimino *ttmn);
 
 #endif
