@@ -10,15 +10,27 @@ Grid* Grid_Create(int rows, int columns)
     grid->rows = rows;
     grid->columns = columns;
     grid->tiles = calloc(rows * columns, sizeof(TileColor));
+    grid->updated = 0;
 
     return grid;
 }
 
 
-TileColor *Grid_GetTile(int x, int y)
+TileColor *Grid_GetTileColor(int x, int y)
 {
 
 }
+
+SDL_Rect Grid_GetTileRect(int x, int y, int tile_size, int show_grid)
+{
+    return (SDL_Rect) {
+        x * tile_size + (show_grid ? 1 : 0),
+        y * tile_size + (show_grid ? 1 : 0),
+        tile_size - (show_grid ? 2 : 0),
+        tile_size - (show_grid ? 2 : 0)
+    };
+}
+
 
 void Grid_Destroy(Grid *grid)
 {
