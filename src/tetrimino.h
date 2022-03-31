@@ -31,6 +31,8 @@ typedef struct
     TetriminoType type;
 } Tetrimino;
 
+// Creation
+
 Tetrimino* TTMN_Create(int x, int y, TetriminoType type);
 Tetrimino* TTMN_CreateRand(int x, int y);
 
@@ -42,8 +44,14 @@ Tetrimino* TTMN_CreateJ(int x, int y);
 Tetrimino* TTMN_CreateZ(int x, int y);
 Tetrimino* TTMN_CreateS(int x, int y);
 
-void TTMN_Rotate(Tetrimino* ttmn);
+// Movement
+
+void TTMN_Rotate(Tetrimino* ttmn, int clockwise);
+void TTMN_RotateClockwise(Tetrimino *ttmn);
+void TTMN_RotateCounterClockwise(Tetrimino *ttmn);
 void TTMN_Move(Tetrimino* ttmn, int dX, int dY);
+
+// freeing
 
 void TTMN_Destroy(Tetrimino *ttmn);
 

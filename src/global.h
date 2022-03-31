@@ -29,6 +29,7 @@ void Global_ChangeState();
 void Global_HandleEvent();
 void Global_Render();
 void Global_Close();
+void Global_Logic();
 
 
 #endif

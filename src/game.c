@@ -52,11 +52,13 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
                 dx = -1;
             else if (code == controls[CONTROL_RIGHT])
                 dx = 1;
-            else if (code == controls[CONTROL_ROTATE])
-                TTMN_Rotate(game->gamelogic->player->ttmn);
+            else if (code == controls[CONTROL_ROTATE_CLOCKWISE])
+                GL_RotatePlayer(game->gamelogic, 1);
+            else if (code == controls[CONTROL_ROTATE_COUNTER_CLOCKWISE])
+                GL_RotatePlayer(game->gamelogic, 0);
 
             if(dx || dy)
-                TTMN_Move(game->gamelogic->player->ttmn, dx, dy);
+                GL_MovePlayer(game->gamelogic, dx, dy);
         }
         
     }
@@ -172,4 +174,9 @@ void Game_RenderFillTile(Game *game, int x, int y)
         game->tile_size - (game->showGrid ? 1 : 0)  
     };
     SDL_RenderFillRect(gRenderer, &rect);
+}
+
+void Game_Logic(Game *game)
+{
+    GL_Update(game->gamelogic);
 }

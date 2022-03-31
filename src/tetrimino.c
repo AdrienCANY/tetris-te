@@ -157,7 +157,17 @@ Tetrimino* TTMN_CreateS(int x, int y)
     return ttmn;
 }
 
-void TTMN_Rotate(Tetrimino* ttmn)
+void TTMN_RotateClockwise(Tetrimino *ttmn)
+{
+    TTMN_Rotate(ttmn, 1);
+}
+
+void TTMN_RotateCounterClockwise(Tetrimino *ttmn)
+{
+    TTMN_Rotate(ttmn, 0);
+}
+
+void TTMN_Rotate(Tetrimino* ttmn, int clockwise)
 {
     // O doesn't change when rotating
     if(ttmn->type == TETRIMINO_O)
@@ -184,8 +194,10 @@ void TTMN_Rotate(Tetrimino* ttmn)
         
         // rotation of referential
 
-        int temp = ttmn->tiles[i].x;
-        ttmn->tiles[i].x = - ttmn->tiles[i].y;
+        int direction = clockwise ? 1 : -1;
+
+        int temp = direction * ttmn->tiles[i].x;
+        ttmn->tiles[i].x = - direction * ttmn->tiles[i].y;
         ttmn->tiles[i].y = temp;
 
         // undo referential shift

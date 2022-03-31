@@ -140,6 +140,14 @@ void Global_Close()
     SDL_Quit();
 }
 
+void Global_Logic()
+{
+    switch(gCurrentStateID)
+    {
+        case STATE_GAME: Game_Logic( (Game*) gCurrentState ); break;
+    } 
+}
+
 int Global_Run()
 {
     if( !Global_Init() )
@@ -151,6 +159,7 @@ int Global_Run()
     while( gCurrentStateID != STATE_EXIT )
     {
         Global_HandleEvent();
+        Global_Logic();
         Global_Render();
         Global_ChangeState();
     }

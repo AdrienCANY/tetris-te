@@ -33,7 +33,33 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
 void GL_MovePlayer(GameLogic *gl, int dx, int dy)
 {
-    TTMN_Move(gl->player->ttmn, dx, dy);
+    // horizontal movement
+
+    TTMN_Move(gl->player->ttmn, dx, 0);
+    if(GL_CheckWallCollision(gl))
+    {
+        TTMN_Move(gl->player->ttmn, - dx, 0);
+    }
+
+
+    // vertical movement
+
+    TTMN_Move(gl->player->ttmn, 0, dy);
+    if(GL_CheckWallCollision(gl))
+    {
+        TTMN_Move(gl->player->ttmn, 0, - dy);
+    }
+
+
+}
+
+void GL_RotatePlayer(GameLogic *gl, int clockwise)
+{
+    TTMN_Rotate(gl->player->ttmn, clockwise);
+    if(GL_CheckWallCollision(gl))
+    {
+        TTMN_Rotate(gl->player->ttmn, !clockwise);
+    }
 }
 
 void GL_Destroy(GameLogic *logic)
@@ -54,4 +80,40 @@ void GL_Destroy(GameLogic *logic)
 
     free(logic);
     logic = NULL;
+}
+
+int GL_CheckWallCollision(GameLogic *logic)
+{
+    Tetrimino* ttmn = logic->player->ttmn; 
+
+    if (ttmn->x < 0 || ttmn->y < 0)
+        return 1;
+
+    for(int i = 0 ; i < ttmn->tiles_count ; ++i)
+    {
+        int x = ttmn->x + ttmn->tiles[i].x;
+        int y = ttmn->y + ttmn->tiles[i].y;
+
+        if(x >= logic->grid->columns || y >= logic->grid->rows)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int GL_CheckGridCollision(GameLogic* logic)
+{
+
+}
+
+void GL_PlaceTTMN(GameLogic *logic)
+{
+
+}
+
+void GL_Update(GameLogic *gl)
+{
+    // todo
 }

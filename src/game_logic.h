@@ -21,6 +21,9 @@ typedef struct
 
 GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed);
 void GL_MovePlayer(GameLogic *gl, int dx, int dy);
+int GL_CheckWallCollision(GameLogic *logic);
+void GL_RotatePlayer(GameLogic *gl, int clockwise);
+void GL_Update(GameLogic *gl);
 void GL_Destroy (GameLogic* gl);
 
 #endif
