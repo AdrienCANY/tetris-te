@@ -1,25 +1,16 @@
 #include "player.h"
 
-static int player_count = 0;
-
 Player* Player_Create(Tetrimino *ttmn)
 {
     Player *player = malloc(sizeof(Player));
 
     player->ttmn = ttmn;
 
-    static int player_count = 0;
-    player_count++;
-    player->player_number = player_count;
-
-    if(player->player_number == 1)
-    {
-        player->controls[CONTROL_UP] = SDL_SCANCODE_UP;
-        player->controls[CONTROL_DOWN] = SDL_SCANCODE_DOWN;
-        player->controls[CONTROL_LEFT] = SDL_SCANCODE_LEFT;
-        player->controls[CONTROL_RIGHT] = SDL_SCANCODE_RIGHT;
-        player->controls[CONTROL_ROTATE] = SDL_SCANCODE_Q;
-    } 
+    player->controls[CONTROL_UP] = SDL_SCANCODE_UP;
+    player->controls[CONTROL_DOWN] = SDL_SCANCODE_DOWN;
+    player->controls[CONTROL_LEFT] = SDL_SCANCODE_LEFT;
+    player->controls[CONTROL_RIGHT] = SDL_SCANCODE_RIGHT;
+    player->controls[CONTROL_ROTATE] = SDL_SCANCODE_SPACE; 
 }
 
 void Player_Load(Player *player, Tetrimino *ttmn)
@@ -32,8 +23,6 @@ void Player_Load(Player *player, Tetrimino *ttmn)
 
 void Player_Destroy(Player* player)
 {
-    player_count--;
-
     if(player->ttmn != NULL)
         TTMN_Destroy(player->ttmn);
     

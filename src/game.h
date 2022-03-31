@@ -23,4 +23,5 @@ void Game_Render(Game *game);
 void Game_Destroy(Game *game);
 
 void Game_UpdateGridTexture(Game *game);
+void Game_RenderFillTile(Game *game, int x, int y);
 #endif

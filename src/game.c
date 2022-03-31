@@ -1,6 +1,7 @@
 #include "game.h"
 #include "global.h"
 #include "constants.h"
+#include "utils.h"
 #include <time.h>
 #include <stdlib.h>
 
@@ -18,21 +19,55 @@ Game* Game_Create()
 
 void Game_HandleEvent(Game* game, SDL_Event *e)
 {
+    // quit
+
     if(e->type == SDL_QUIT)
     {
-        gNextStateID = STATE_EXIT; 
+        gNextStateID = STATE_EXIT; // exit the program 
     }
-    else if( e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_ESCAPE)
+    
+    // key press
+
+    else if( e->type == SDL_KEYDOWN)
     {
-        gNextStateID = STATE_TITLE;
+        // escape -> go back to title page
+
+        if(e->key.keysym.sym == SDLK_ESCAPE)
+            gNextStateID = STATE_TITLE;
+
+
+        // else check against player's controls
+        else
+        {
+            SDL_Scancode code = e->key.keysym.scancode;
+            SDL_Scancode *controls = game->gamelogic->player->controls;
+            
+            int dx = 0, dy = 0;
+
+            if(code == controls[CONTROL_UP])
+                dy = -1;
+            else if (code == controls[CONTROL_DOWN])
+                dy = 1;
+            else if (code == controls[CONTROL_LEFT])
+                dx = -1;
+            else if (code == controls[CONTROL_RIGHT])
+                dx = 1;
+            else if (code == controls[CONTROL_ROTATE])
+                TTMN_Rotate(game->gamelogic->player->ttmn);
+
+            if(dx || dy)
+                TTMN_Move(game->gamelogic->player->ttmn, dx, dy);
+        }
+        
     }
+
 
     // if the grid has been updated (ie if tiles have been dropped), update the grid texture
 
-    if( game->gamelogic->grid->updated )
+    if( game->gamelogic->grid_updated )
     {
         Game_UpdateGridTexture(game);
-        game->gamelogic->grid->updated = 0;
+        game->gamelogic->grid_updated = 0;
     }
 }
 
@@ -53,15 +88,16 @@ void Game_Render(Game *game)
 
     // render player Tetrimino
 
-    // Tetrimino* player_ttmn = game->gamelogic->player->ttmn;
-    // SDL_Rect rect = {0};
-    // for(int i = 0 ; i < player_ttmn->tiles_count ; ++i)
-    // {
-    //     int x = player_ttmn->x + player_ttmn->tiles[i].x;
-    //     int y = player_ttmn->y + player_ttmn->tiles[i].y;
-    //     SDL_Rect rect = Grid_GetTileRect(x, y, game->tile_size, game->showGrid);
+    Tetrimino* player_ttmn = game->gamelogic->player->ttmn;
+    setRenderDrawColor(player_ttmn->color);
 
-    // }
+    for(int i = 0 ; i < player_ttmn->tiles_count ; ++i)
+    {
+        int x = player_ttmn->x + player_ttmn->tiles[i].x;
+        int y = player_ttmn->y + player_ttmn->tiles[i].y;
+
+        Game_RenderFillTile(game, x, y);
+    }
 
     // unset viewport
 
@@ -123,4 +159,17 @@ void Game_UpdateGridTexture(Game *game)
 
     // return texture
     game->gridTexture = texture;
+}
+
+
+void Game_RenderFillTile(Game *game, int x, int y)
+{
+    SDL_Rect rect = 
+    {
+        x * game->tile_size + (game->showGrid ? 1 : 0),
+        y * game->tile_size + (game->showGrid ? 1 : 0),
+        game->tile_size - (game->showGrid ? 1 : 0),
+        game->tile_size - (game->showGrid ? 1 : 0)  
+    };
+    SDL_RenderFillRect(gRenderer, &rect);
 }

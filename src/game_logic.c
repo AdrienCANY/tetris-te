@@ -24,7 +24,16 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     logic->lines = 0;
     logic->seed = seed;
 
+    // variable for the renderer to know if the grid has been updated, ie if a TTMN has been placed
+
+    logic->grid_updated = 0;
+
     return logic;
+}
+
+void GL_MovePlayer(GameLogic *gl, int dx, int dy)
+{
+    TTMN_Move(gl->player->ttmn, dx, dy);
 }
 
 void GL_Destroy(GameLogic *logic)
