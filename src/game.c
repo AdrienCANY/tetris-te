@@ -147,7 +147,15 @@ void Game_UpdateGridTexture(Game *game)
 
 
     // draw tiles
-    // TODO
+   
+    for(int y = 0 ; y < grid->rows ; ++y)
+    {
+        for(int x = 0 ; x < grid->columns ; ++x)
+        {
+            setRenderDrawColor(Grid_GetTileColor(grid, x, y));
+            Game_RenderFillTile(game, x, y);
+        }
+    }
 
     // draw outline
 

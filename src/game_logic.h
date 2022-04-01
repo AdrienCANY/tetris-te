@@ -7,8 +7,8 @@
 
 typedef struct 
 {
-    Player *player;
     Grid* grid;
+    Player *player;
     Tetrimino *hold;
     Tetrimino **queue;
     int queue_size;
@@ -20,10 +20,16 @@ typedef struct
 } GameLogic;
 
 GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed);
-void GL_MovePlayer(GameLogic *gl, int dx, int dy);
-int GL_CheckWallCollision(GameLogic *logic);
-void GL_RotatePlayer(GameLogic *gl, int clockwise);
-void GL_Update(GameLogic *gl);
 void GL_Destroy (GameLogic* gl);
+
+void GL_Update(GameLogic *gl);
+
+void GL_MovePlayer(GameLogic *gl, int dx, int dy);
+void GL_RotatePlayer(GameLogic *gl, int clockwise);
+
+int GL_CheckWallCollision(GameLogic *logic);
+int GL_CheckTileCollision(GameLogic *logic);
+void GL_PlaceTTMN(GameLogic *logic);
+
 
 #endif

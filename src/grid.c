@@ -2,6 +2,7 @@
 #include <stdlib.h> 
 #include "global.h"
 #include <SDL.h>
+#include "utils.h"
 
 Grid* Grid_Create(int rows, int columns)
 {
@@ -16,12 +17,13 @@ Grid* Grid_Create(int rows, int columns)
 
 TileColor Grid_GetTileColor(Grid *grid, int x, int y)
 {
-    return grid->tiles[(grid->rows*y) + x];
+    int i = ( grid->columns * y ) + x;
+    return grid->tiles[(grid->columns*y) + x];
 }
 
 void Grid_SetTileColor(Grid *grid, int x, int y, TileColor color)
 {
-    grid->tiles[(grid->rows*y) + x] = color;
+    grid->tiles[(grid->columns*y) + x] = color;
 }
 
 void Grid_Destroy(Grid *grid)

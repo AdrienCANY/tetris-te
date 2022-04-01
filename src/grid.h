@@ -11,8 +11,6 @@ typedef struct
     int rows;
     int columns;
     TileColor *tiles;
-
-    int updated;
 } Grid;
 
 Grid* Grid_Create(int rows, int columns);

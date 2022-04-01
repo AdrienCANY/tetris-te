@@ -22,8 +22,8 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "build_sdl2"
+            ]//,
+            //"preLaunchTask": "build_sdl2"
         }
     ]
 }

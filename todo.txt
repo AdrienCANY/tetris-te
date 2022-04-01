@@ -1,12 +1,8 @@
-TTMN	
-	Remplir la fonction Logic_update
-	Collision tile
-	placements des TTMN en bas
-Grid
-	Descente des tetriminos
-	Génération d'un nouveau tetrimino lorsque le tetrimino précédent 
-	est placé
-	Affichage avec et sans la grille
-	Suppression des lignes complétées
-Global
-	Score
+TO DO
+1) Queue
+2) Hold
+3) descente
+4) Suppression des lignes compétées
+5) Affichage sans la grille
+6) FPS
+7) Score

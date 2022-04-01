@@ -11,14 +11,14 @@ typedef enum
     CONTROL_LEFT,
     CONTROL_RIGHT,
     CONTROL_ROTATE_CLOCKWISE,
-    CONTROL_ROTATE_COUNTER_CLOCKWISE
+    CONTROL_ROTATE_COUNTER_CLOCKWISE,
+    CONTROL_LAST // only meant to get the count of controls
 } Control;
 
 
 typedef struct Player {
     Tetrimino *ttmn;
-    SDL_Scancode controls[5];
-    int player_number;
+    SDL_Scancode controls[CONTROL_LAST];
 } Player;
 
 

@@ -1,5 +1,7 @@
 #include "utils.h"
+#include "stdio.h"
 #include "constants.h"
+
 
 int min( int a, int b )
 {
@@ -50,4 +52,25 @@ void drawTile(int x, int y)
     SDL_Rect rect = { x * TILE_SIZE + 1, y * TILE_SIZE + 1, TILE_SIZE - 1, TILE_SIZE - 1 };
 
     SDL_RenderFillRect(gRenderer, &rect);
+}
+
+void printGrid(Grid *grid)
+{
+    printf("     ");
+    for(int a = 0 ; a < grid->columns ; ++a)
+    {
+        printf("%d ", a);
+    }
+    printf("\n------------------------\n");
+
+    for(int a = 0 ; a < grid->rows ; ++a)
+    {
+        printf("%02d | ", a);
+        for(int b = 0 ; b < grid->columns; ++b)
+        {
+            TileColor color = Grid_GetTileColor(grid, b, a);
+            printf("%d ", color);
+        }
+        printf("\n");
+    }
 }

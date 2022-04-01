@@ -12,6 +12,8 @@ Player* Player_Create(Tetrimino *ttmn)
     player->controls[CONTROL_RIGHT] = SDL_SCANCODE_RIGHT;
     player->controls[CONTROL_ROTATE_CLOCKWISE] = SDL_SCANCODE_E;
     player->controls[CONTROL_ROTATE_COUNTER_CLOCKWISE] = SDL_SCANCODE_Q;
+
+    return player;
 }
 
 void Player_Load(Player *player, Tetrimino *ttmn)

@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include "game_logic.h"
+#include "texture.h"
 
 typedef struct 
 {
@@ -15,6 +16,8 @@ typedef struct
     int showGrid;
     int tile_size;
     SDL_Texture* gridTexture;
+    Texture* nextTexture;
+    Texture* holdTexture;
 } Game;
 
 Game* Game_Create();
