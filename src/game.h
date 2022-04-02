@@ -16,6 +16,8 @@ typedef struct
     int showGrid;
     int tile_size;
     SDL_Texture* gridTexture;
+    int grid_w;
+    int grid_h;
     Texture* nextTexture;
     Texture* holdTexture;
 } Game;
@@ -28,5 +30,5 @@ void Game_Destroy(Game *game);
 void Game_Logic(Game *game);
 
 void Game_UpdateGridTexture(Game *game);
-void Game_RenderFillTile(Game *game, int x, int y);
+SDL_Rect Game_GetTileRenderRect(Game *game, int x, int y);
 #endif

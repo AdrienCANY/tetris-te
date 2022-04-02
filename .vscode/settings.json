@@ -9,6 +9,7 @@
         "movable_object.h": "c",
         "other.h": "c",
         "match.H": "cpp",
-        "racket.h": "c"
+        "racket.h": "c",
+        "numbers": "c"
     }
 }

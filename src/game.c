@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "utils.h"
 #include <time.h>
+#include "texture.h"
 #include <stdlib.h>
 
 Game* Game_Create()
@@ -13,6 +14,13 @@ Game* Game_Create()
     game->showGrid = 1;
     game->tile_size = TILE_SIZE;
     Game_UpdateGridTexture(game);
+
+    // texts
+    int next_x = game->grid_w + 250;
+    int next_y = 100;
+    game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, next_x, next_y, 100, 20); 
+
+    game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 50, 0, 100, 200, 20);
 
     return game;
 }
@@ -79,7 +87,7 @@ void Game_Render(Game *game)
 
     int w = game->gamelogic->grid->columns * TILE_SIZE + game->showGrid;
     int h = game->gamelogic->grid->rows * TILE_SIZE + game->showGrid;
-    SDL_Rect viewport = {100, 100, w, h};
+    SDL_Rect viewport = {200, 100, w, h};
     SDL_RenderSetViewport(gRenderer, &viewport);
 
     // render grid
@@ -98,7 +106,8 @@ void Game_Render(Game *game)
         int x = player_ttmn->x + player_ttmn->tiles[i].x;
         int y = player_ttmn->y + player_ttmn->tiles[i].y;
 
-        Game_RenderFillTile(game, x, y);
+        SDL_Rect tile_rect = Game_GetTileRenderRect(game, x, y);
+        SDL_RenderFillRect(gRenderer, &tile_rect);
     }
 
     // unset viewport
@@ -107,7 +116,28 @@ void Game_Render(Game *game)
 
     // render Tetrimino queue
 
+    Texture_Render(game->nextTexture);
+    SDL_Rect q_rect = {0};
+    for(int i = 0 ; i < game->gamelogic->queue_size ; ++i)
+    {
+        Tetrimino* q_ttmn = game->gamelogic->queue[i];
+        setRenderDrawColor(q_ttmn->color);
+        for(int j = 0 ; j < q_ttmn->tiles_count; j++)
+        {
+            int x = q_ttmn->x + q_ttmn->tiles[j].x;
+            int y = q_ttmn->y + q_ttmn->tiles[j].y;
+            q_rect = Game_GetTileRenderRect(game, x, y);
+            q_rect.x += game->grid_w + 200;
+            q_rect.y += 100 +  (i+1) * (2*game->tile_size + 10);
+
+            SDL_RenderFillRect(gRenderer, &q_rect);
+        }
+    }
+    
+
     // render held Tetrimino
+
+    Texture_Render(game->holdTexture);
 
 }
 
@@ -153,7 +183,8 @@ void Game_UpdateGridTexture(Game *game)
         for(int x = 0 ; x < grid->columns ; ++x)
         {
             setRenderDrawColor(Grid_GetTileColor(grid, x, y));
-            Game_RenderFillTile(game, x, y);
+            SDL_Rect tile_rect = Game_GetTileRenderRect(game, x, y);
+            SDL_RenderFillRect(gRenderer, &tile_rect);
         }
     }
 
@@ -169,10 +200,13 @@ void Game_UpdateGridTexture(Game *game)
 
     // return texture
     game->gridTexture = texture;
-}
+
+    // update grid dimension
+    SDL_QueryTexture(game->gridTexture, NULL, NULL, &game->grid_w, &game->grid_h);
+}   
 
 
-void Game_RenderFillTile(Game *game, int x, int y)
+SDL_Rect Game_GetTileRenderRect(Game *game, int x, int y)
 {
     SDL_Rect rect = 
     {
@@ -181,7 +215,8 @@ void Game_RenderFillTile(Game *game, int x, int y)
         game->tile_size - (game->showGrid ? 1 : 0),
         game->tile_size - (game->showGrid ? 1 : 0)  
     };
-    SDL_RenderFillRect(gRenderer, &rect);
+
+    return rect;
 }
 
 void Game_Logic(Game *game)

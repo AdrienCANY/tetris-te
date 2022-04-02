@@ -1,6 +1,16 @@
 TO DO
 1) Queue
+4) mettre des cadres pour hold et queue
+4) affiner le rendu des tetriminos
+	-> refactor la classe TTMN avec une méthode getWidth, getHeight
+	-> faire une méthode qui renvoie une texture dans la classe TTMN ?
 2) Hold
+3) débuguer la rotation 
+	a) inversée pour les I -> leur fait perdre une case
+	b) la rotation d'avant compte toujours dans la hitbox du TTMN
+3) mettre à jour les destroy
+
+4) affiner les collisions
 3) descente
 4) Suppression des lignes compétées
 5) Affichage sans la grille

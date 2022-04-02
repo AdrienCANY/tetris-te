@@ -18,14 +18,24 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     Tetrimino* ttmn = TTMN_CreateRand(0, 0);
     logic->player = Player_Create(ttmn);
     logic->hold = NULL;
-    logic -> queue = calloc( queue_size, sizeof(Tetrimino*) );
+    logic -> queue = malloc( queue_size * sizeof(Tetrimino*) );
+    logic -> queue_size = 3;
+
+    // fill tetrimino queue
+
+    for(int i = 0 ; i < logic->queue_size ; ++i)
+    {
+        logic -> queue[i] = TTMN_CreateRand(0,0);
+    }
+
+    // other properties
 
     logic->score = 0;
     logic->level = 1;
     logic->lines = 0;
     logic->seed = seed;
 
-    // variable for the renderer to know if the grid has been updated, ie if a TTMN has been placed
+    // variable for other struct to know if the grid has been updated
 
     logic->grid_updated = 0;
 
@@ -131,6 +141,8 @@ void GL_PlaceTTMN(GameLogic *logic)
     Tetrimino* ttmn = logic->player->ttmn;
     Grid* grid = logic->grid;
 
+    // update grid
+
     for(int i = 0 ; i < ttmn->tiles_count ; ++i)
     {
         int x = ttmn->x + ttmn->tiles[i].x;
@@ -140,7 +152,20 @@ void GL_PlaceTTMN(GameLogic *logic)
 
     logic->grid_updated = 1;
 
-    Player_Load(logic->player, TTMN_CreateRand(0, 0));
+    // pop the queue's first tetrimino into play
+
+    Player_Load(logic->player, logic->queue[0]);
+
+    // shift all tetriminos in the queue by 1 to the left
+
+    for(int i = 1 ; i < logic->queue_size ; ++i)
+    {
+        logic->queue[i-1] = logic->queue[i];
+    }
+
+    // add a new tetrimino to the queue
+
+    logic->queue[logic->queue_size - 1] = TTMN_CreateRand(0,0);
 }
 
 void GL_Update(GameLogic *gl)
