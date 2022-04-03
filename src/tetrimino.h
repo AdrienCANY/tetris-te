@@ -25,6 +25,7 @@ typedef struct
 typedef struct 
 {
     int x, y;
+    int w, h;
     Tile tiles[4];
     int tiles_count;
     TileColor color;

@@ -3,19 +3,39 @@
 #include "global.h"
 #include "constants.h"
 #include "utils.h"
+#include <stdio.h>
 
 Tetrimino* TTMN_Create(int x, int y, TetriminoType type)
 {
+    Tetrimino *ttmn = NULL;
     switch(type)
     {
-        case TETRIMINO_I: TTMN_CreateI(x, y);  break;
-        case TETRIMINO_O: TTMN_CreateO(x, y); break;
-        case TETRIMINO_T: TTMN_CreateT(x, y); break;
-        case TETRIMINO_L: TTMN_CreateL(x, y); break;
-        case TETRIMINO_J: TTMN_CreateJ(x, y);  break;
-        case TETRIMINO_Z: TTMN_CreateZ(x, y); break;
-        case TETRIMINO_S: TTMN_CreateS(x, y); break;
+        case TETRIMINO_I: ttmn = TTMN_CreateI(x, y); break;
+        case TETRIMINO_O: ttmn = TTMN_CreateO(x, y); break;
+        case TETRIMINO_T: ttmn = TTMN_CreateT(x, y); break;
+        case TETRIMINO_L: ttmn = TTMN_CreateL(x, y); break;
+        case TETRIMINO_J: ttmn = TTMN_CreateJ(x, y); break;
+        case TETRIMINO_Z: ttmn = TTMN_CreateZ(x, y); break;
+        case TETRIMINO_S: ttmn = TTMN_CreateS(x, y); break;
     }
+
+    // compute tetrimnio's height and width
+    
+    int w = ttmn->tiles[0].x;
+    int h = ttmn->tiles[0].y;
+    for(int i = 1; i < ttmn->tiles_count ; ++i)
+    {
+        w = max(w, ttmn->tiles[i].x);
+        h = max(h, ttmn->tiles[i].y);
+    }
+    ttmn->h = h + 1;
+    ttmn->w = w + 1;
+
+    printf("Created TTMN | Type = %d | h = %d | w = %d\n", ttmn->type, ttmn->h, ttmn->w);
+
+    // return tetrimino
+
+    return ttmn;
 }
 
 Tetrimino* TTMN_CreateRand(int x, int y)
@@ -217,6 +237,12 @@ void TTMN_Rotate(Tetrimino* ttmn, int clockwise)
         }
 
     }
+
+    // switch w and h
+    int w = ttmn->w;
+    ttmn->w = ttmn->h;
+    ttmn->h = w;
+
 }
 
 void TTMN_Destroy(Tetrimino *ttmn)

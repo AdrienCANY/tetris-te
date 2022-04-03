@@ -150,6 +150,55 @@ void GL_PlaceTTMN(GameLogic *logic)
         Grid_SetTileColor(grid, x, y, ttmn->color);
     }
 
+    // remove completed lines
+
+    int completed_lines = 0;
+
+    for(int y = ttmn->y ; y < ttmn->y + ttmn->h ; y++)
+    {
+        printf("checking for completion line n°%d\n", y);
+        int completed = 1;
+
+        // check for completed lines
+
+        for(int x = 0 ; x < grid->columns ; x++)
+        {
+            if(Grid_GetTileColor(grid, x, y) == TILE_BLACK)
+            {
+                completed = 0;
+                break;
+            }
+        }
+
+        if( completed )
+        {
+            completed_lines++;
+        }
+    }
+
+    // shift down tiles depending on how many lines were completed (if any)
+
+    if(completed_lines)
+    {
+        // shift down values
+        for(int y = grid->rows - 1 ; y > 0 ; --y)
+        {
+            for(int x = 0 ; x < grid->columns ; x++)
+            {
+                Grid_SetTileColor(grid, x, y, Grid_GetTileColor(grid, x, y-1));
+            }
+        }
+
+        // fill first line with empty tiles 
+
+        for(int x = 0 ; x < grid->columns ; x++)
+        {
+            Grid_SetTileColor(grid, x, 0, TILE_BLACK);
+        }
+    }
+
+    // notify that the grid has been updated 
+
     logic->grid_updated = 1;
 
     // pop the queue's first tetrimino into play
