@@ -101,18 +101,16 @@ int GL_CheckWallCollision(GameLogic *logic)
 {
     Tetrimino* ttmn = logic->player->ttmn; 
 
-    if (ttmn->x < 0 || ttmn->y < 0)
-        return 1;
-
     for(int i = 0 ; i < ttmn->tiles_count ; ++i)
     {
         int x = ttmn->x + ttmn->tiles[i].x;
         int y = ttmn->y + ttmn->tiles[i].y;
 
-        if(x >= logic->grid->columns || y >= logic->grid->rows)
-        {
+        int left = x < 0 || y < 0;
+        int right = x >= logic->grid->columns || y >= logic->grid->rows;
+
+        if( left || right )
             return 1;
-        }
     }
 
     return 0;
