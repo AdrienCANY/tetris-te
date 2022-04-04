@@ -116,6 +116,8 @@ int GL_CheckWallCollision(GameLogic *logic)
     return 0;
 }
 
+
+
 int GL_CheckTileCollision(GameLogic *logic)
 {
     Tetrimino *ttmn = logic->player->ttmn;
@@ -199,6 +201,45 @@ void GL_PlaceTTMN(GameLogic *logic)
 
     logic->grid_updated = 1;
 
+    // pop queue's first ttmn into play, and update rest of the queue
+
+    GL_PopQueue(logic);
+
+}
+
+void GL_Update(GameLogic *gl)
+{
+    // todo
+}
+
+void GL_HoldTTMN(GameLogic *logic)
+{
+    if(logic->hold == NULL)
+    {
+
+        // hold current ttmn
+        logic->hold = malloc(sizeof(Tetrimino));
+        memcpy(logic->hold, logic->player->ttmn, sizeof(Tetrimino));
+
+        // load queue's next
+        GL_PopQueue(logic);
+    }
+    else 
+    {
+        // switch currently held ttmn and current one
+        int x = logic->player->ttmn->x;
+        int y = logic->player->ttmn->y;
+        Tetrimino* temp = logic->hold;
+        logic->hold = logic->player->ttmn;
+        logic->player->ttmn = temp;
+        logic->player->ttmn->x = x;
+        logic->player->ttmn->y = y;
+    }
+
+}
+
+void GL_PopQueue(GameLogic *logic)
+{
     // pop the queue's first tetrimino into play
 
     Player_Load(logic->player, logic->queue[0]);
@@ -213,9 +254,4 @@ void GL_PlaceTTMN(GameLogic *logic)
     // add a new tetrimino to the queue
 
     logic->queue[logic->queue_size - 1] = TTMN_CreateRand(0,0);
-}
-
-void GL_Update(GameLogic *gl)
-{
-    // todo
 }

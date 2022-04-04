@@ -29,6 +29,9 @@ void Game_Destroy(Game *game);
 
 void Game_Logic(Game *game);
 
+
+void Game_RenderTTMN(Game *game, Tetrimino* ttmn, int x, int y);
+
 void Game_UpdateGridTexture(Game *game);
 SDL_Rect Game_GetTileRenderRect(Game *game, int x, int y);
 #endif

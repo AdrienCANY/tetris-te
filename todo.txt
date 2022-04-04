@@ -1,10 +1,6 @@
 TO DO
 -> Hold
-	-> refactor la class ttmn
-		-> ajouter une méthode pour récup' une texture
-		-> faire une méthode getX getY getW getH
-			-> quand on fait une rotation, les tiles commencent plus à 0
-
+	-> check les collisions quand on switch 
 
 
 
@@ -14,7 +10,9 @@ TO DO
 -> mettre à jour les fonctions destroy
 -> affiner les collisions (retirer la collision vers le haut, etc...)
 -> descente
--> mettre des cadres pour hold et queue
+-> style affichage hold et queue
+	-> ajouter des cadres
+	-> refactor pour générer des textures pour les TTMN, qu'on update au besoin
 -> animation quand on compléte des lignes
 -> Affichage sans la grille
 -> FPS

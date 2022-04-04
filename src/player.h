@@ -12,6 +12,7 @@ typedef enum
     CONTROL_RIGHT,
     CONTROL_ROTATE_CLOCKWISE,
     CONTROL_ROTATE_COUNTER_CLOCKWISE,
+    CONTROL_HOLD,
     CONTROL_LAST // only meant to get the count of controls
 } Control;
 

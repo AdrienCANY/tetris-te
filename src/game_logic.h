@@ -30,6 +30,9 @@ void GL_RotatePlayer(GameLogic *gl, int clockwise);
 int GL_CheckWallCollision(GameLogic *logic);
 int GL_CheckTileCollision(GameLogic *logic);
 
+void GL_HoldTTMN(GameLogic *logic);
+void GL_PopQueue(GameLogic *logic);
+
 void GL_PlaceTTMN(GameLogic *logic);
 
 

@@ -31,10 +31,7 @@ Tetrimino* TTMN_Create(int x, int y, TetriminoType type)
     ttmn->h = h + 1;
     ttmn->w = w + 1;
 
-    printf("Created TTMN | Type = %d | h = %d | w = %d\n", ttmn->type, ttmn->h, ttmn->w);
-
     // return tetrimino
-
     return ttmn;
 }
 

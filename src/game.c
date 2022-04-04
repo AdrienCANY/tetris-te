@@ -64,7 +64,8 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
                 GL_RotatePlayer(game->gamelogic, 1);
             else if (code == controls[CONTROL_ROTATE_COUNTER_CLOCKWISE])
                 GL_RotatePlayer(game->gamelogic, 0);
-
+            else if (code == controls[CONTROL_HOLD])
+                GL_HoldTTMN(game->gamelogic);
             if(dx || dy)
                 GL_MovePlayer(game->gamelogic, dx, dy);
         }
@@ -138,7 +139,22 @@ void Game_Render(Game *game)
     // render held Tetrimino
 
     Texture_Render(game->holdTexture);
+    if(game->gamelogic->hold != NULL)
+        Game_RenderTTMN(game, game->gamelogic->hold, 50, 120);
+}
 
+
+void Game_RenderTTMN(Game *game, Tetrimino* ttmn, int x, int y)
+{
+    setRenderDrawColor(ttmn->color);
+    SDL_Rect rect = {0};
+    for(int i = 0 ; i < ttmn->tiles_count ; ++i)
+    {
+        rect = Game_GetTileRenderRect(game, ttmn->tiles[i].x, ttmn->tiles[i].y);
+        rect.x += x;
+        rect.y += y;
+        SDL_RenderFillRect(gRenderer, &rect);
+    }
 }
 
 void Game_Destroy(Game *game)
