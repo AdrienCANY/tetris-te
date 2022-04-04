@@ -2,3 +2,4 @@ build/
 todo.txt
 backup
 backup/
+*todo.txt
