@@ -50,10 +50,10 @@ Tetrimino* TTMN_CreateI(int x, int y)
     ttmn->type = TETRIMINO_I;
     ttmn->color = TILE_CYAN;
 
-    ttmn->tiles[0] = (Tile) {0,0};
-    ttmn->tiles[1] = (Tile) {1,0};
-    ttmn->tiles[2] = (Tile) {2,0};
-    ttmn->tiles[3] = (Tile) {3,0};
+    ttmn->tiles[0] = (Tile) {0,1};
+    ttmn->tiles[1] = (Tile) {1,1};
+    ttmn->tiles[2] = (Tile) {2,1};
+    ttmn->tiles[3] = (Tile) {3,1};
 
     ttmn->tiles_count = 4;
 
@@ -200,8 +200,8 @@ void TTMN_Rotate(Tetrimino* ttmn, int clockwise)
             if(ttmn->tiles[i].x >= 2) ttmn->tiles[i].x -= 1;
             else ttmn->tiles[i].x -= 2;
 
-            if(ttmn->tiles[i].y >= 2) ttmn->tiles[i].y -= 0;
-            else ttmn->tiles[i].y -= 1;
+            if(ttmn->tiles[i].y >= 2) ttmn->tiles[i].y -= 1;
+            else ttmn->tiles[i].y -= 2;
         }
         else 
         {
@@ -224,8 +224,8 @@ void TTMN_Rotate(Tetrimino* ttmn, int clockwise)
             if(ttmn->tiles[i].x >= 0) ttmn->tiles[i].x += 1;
             else ttmn->tiles[i].x += 2;
 
-            if(ttmn->tiles[i].y >= 0) ttmn->tiles[i].y += 0;
-            else ttmn->tiles[i].y += 1;
+            if(ttmn->tiles[i].y >= 0) ttmn->tiles[i].y += 1;
+            else ttmn->tiles[i].y += 2;
         }
         else 
         {
