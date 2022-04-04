@@ -1,5 +1,5 @@
 TO DO
-
+-> débuguer la rotation à gauche des I
 -> mettre à jour les fonctions destroy
 -> affiner les collisions (retirer la collision vers le haut, etc...)
 -> descente
