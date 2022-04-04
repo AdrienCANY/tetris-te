@@ -20,6 +20,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     logic->hold = NULL;
     logic -> queue = malloc( queue_size * sizeof(Tetrimino*) );
     logic -> queue_size = 3;
+    logic->hold_allowed = 1;
 
     // fill tetrimino queue
 
@@ -205,6 +206,10 @@ void GL_PlaceTTMN(GameLogic *logic)
 
     GL_PopQueue(logic);
 
+    // re-allow user to hold
+
+    logic->hold_allowed = 1;
+
 }
 
 void GL_Update(GameLogic *gl)
@@ -214,6 +219,14 @@ void GL_Update(GameLogic *gl)
 
 void GL_HoldTTMN(GameLogic *logic)
 {
+    if( !logic->hold_allowed )
+    {
+        printf("You can not hold now !\n");
+        return;
+    }
+    
+    
+
     if(logic->hold == NULL)
     {
 
@@ -227,15 +240,14 @@ void GL_HoldTTMN(GameLogic *logic)
     else 
     {
         // switch currently held ttmn and current one
-        int x = logic->player->ttmn->x;
-        int y = logic->player->ttmn->y;
         Tetrimino* temp = logic->hold;
         logic->hold = logic->player->ttmn;
         logic->player->ttmn = temp;
-        logic->player->ttmn->x = x;
-        logic->player->ttmn->y = y;
+        logic->player->ttmn->x = 0;
+        logic->player->ttmn->y = 0;
     }
-
+    
+    logic->hold_allowed = 0;
 }
 
 void GL_PopQueue(GameLogic *logic)

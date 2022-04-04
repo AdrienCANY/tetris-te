@@ -11,6 +11,7 @@ typedef struct
     Player *player;
     Tetrimino *hold;
     Tetrimino **queue;
+    int hold_allowed;
     int queue_size;
     int score; 
     int level;

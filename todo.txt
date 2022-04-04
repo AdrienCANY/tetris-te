@@ -1,15 +1,9 @@
 TO DO
--> Hold
-	-> check les collisions quand on switch 
 
-
-
--> affiner le rendu des tetriminos ?
-	-> refactor la classe TTMN avec une méthode getWidth, getHeight
-	-> faire une méthode qui renvoie une texture dans la classe TTMN ?
 -> mettre à jour les fonctions destroy
 -> affiner les collisions (retirer la collision vers le haut, etc...)
 -> descente
+-> lose condition = collision alors que y = 0
 -> style affichage hold et queue
 	-> ajouter des cadres
 	-> refactor pour générer des textures pour les TTMN, qu'on update au besoin
