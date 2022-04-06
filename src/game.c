@@ -159,6 +159,8 @@ void Game_RenderTTMN(Game *game, Tetrimino* ttmn, int x, int y)
 
 void Game_Destroy(Game *game)
 {
+    Texture_Destroy(game->nextTexture);
+    Texture_Destroy(game->holdTexture);
     SDL_DestroyTexture(game->gridTexture);
     GL_Destroy(game->gamelogic);
     free(game);
