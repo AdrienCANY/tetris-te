@@ -117,17 +117,18 @@ void Game_Render(Game *game)
     for(int i = 0 ; i < game->gamelogic->queue_size ; ++i)
     {
         Tetrimino* q_ttmn = game->gamelogic->queue[i];
-        setRenderDrawColor(q_ttmn->color);
-        for(int j = 0 ; j < q_ttmn->tiles_count; j++)
-        {
-            int x = q_ttmn->x + q_ttmn->tiles[j].x;
-            int y = q_ttmn->y + q_ttmn->tiles[j].y;
-            q_rect = Game_GetTileRenderRect(game, x, y);
-            q_rect.x += game->grid_w + 200;
-            q_rect.y += 100 +  (i+1) * (2*game->tile_size + 10);
+        // setRenderDrawColor(q_ttmn->color);
+        // for(int j = 0 ; j < q_ttmn->tiles_count; j++)
+        // {
+        //     int x = q_ttmn->x + q_ttmn->tiles[j].x;
+        //     int y = q_ttmn->y + q_ttmn->tiles[j].y;
+        //     q_rect = Game_GetTileRenderRect(game, x, y);
+        //     q_rect.x += game->grid_w + 200;
+        //     q_rect.y += 100 +  (i+1) * (2*game->tile_size + 10);
 
-            SDL_RenderFillRect(gRenderer, &q_rect);
-        }
+        //     SDL_RenderFillRect(gRenderer, &q_rect);
+        // }
+        Game_RenderTTMN(game, q_ttmn, 400, 100 +  (i+1) * (2*game->tile_size + 10));
     }
     
 

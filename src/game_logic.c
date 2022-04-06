@@ -44,7 +44,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     logic->dY = 0;
     logic->soft_dropping = 0;
     logic->speed = 1;
-    logic->soft_drop_speed = 8;
+    logic->soft_drop_speed = 6;
     logic->timer = Timer_Create();
     Timer_Start(logic->timer);
 
