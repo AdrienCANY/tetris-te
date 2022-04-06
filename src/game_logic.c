@@ -47,32 +47,45 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     logic->soft_drop_speed = 6;
     logic->timer = Timer_Create();
     Timer_Start(logic->timer);
+    logic->landing_shadow = malloc(sizeof(Tetrimino));
+    GL_UpdateLandingShadow(logic);
 
     return logic;
 }
 
 void GL_MovePlayer(GameLogic *gl, int dx, int dy)
 {
-    // horizontal movement
+    Tetrimino* p_ttmn = gl->player->ttmn;
 
-    TTMN_Move(gl->player->ttmn, dx, 0);
-    if( GL_CheckWallCollision(gl) || GL_CheckTileCollision(gl) )
+    // horizontal movement
+    if(dx)
     {
-        TTMN_Move(gl->player->ttmn, - dx, 0);
-        printf("Horizontal collision detected !!\n");        
+        TTMN_Move(gl->player->ttmn, dx, 0);
+        if( GL_CheckWallCollision(gl, p_ttmn) || GL_CheckTileCollision(gl, p_ttmn) )
+        {
+            TTMN_Move(gl->player->ttmn, - dx, 0);
+            printf("Horizontal collision detected !!\n");        
+        }
+        GL_UpdateLandingShadow(gl);
     }
+
+    
 
 
     // vertical movement
 
-    TTMN_Move(gl->player->ttmn, 0, dy);
-    if( GL_CheckWallCollision(gl) || GL_CheckTileCollision(gl) )
+    if(dy)
     {
-        TTMN_Move(gl->player->ttmn, 0, - dy);
-        printf("Vertical collision detected !!\n");
+        TTMN_Move(gl->player->ttmn, 0, dy);
+        if( GL_CheckWallCollision(gl, p_ttmn) || GL_CheckTileCollision(gl, p_ttmn) )
+        {
+            TTMN_Move(gl->player->ttmn, 0, - dy);
+            printf("Vertical collision detected !!\n");
 
-        GL_PlaceTTMN(gl);
+            GL_PlaceTTMN(gl);
+        }
     }
+
 
 
 }
@@ -80,10 +93,11 @@ void GL_MovePlayer(GameLogic *gl, int dx, int dy)
 void GL_RotatePlayer(GameLogic *gl, int clockwise)
 {
     TTMN_Rotate(gl->player->ttmn, clockwise);
-    if(GL_CheckWallCollision(gl))
+    if(GL_CheckWallCollision(gl, gl->player->ttmn))
     {
         TTMN_Rotate(gl->player->ttmn, !clockwise);
     }
+    GL_UpdateLandingShadow(gl);
 }
 
 void GL_Destroy(GameLogic *logic)
@@ -104,13 +118,15 @@ void GL_Destroy(GameLogic *logic)
 
     Timer_Destroy(logic->timer);
 
+    if(logic->landing_shadow != NULL)
+        TTMN_Destroy(logic->landing_shadow);
+
     free(logic);
     logic = NULL;
 }
 
-int GL_CheckWallCollision(GameLogic *logic)
+int GL_CheckWallCollision(GameLogic *logic, Tetrimino* ttmn)
 {
-    Tetrimino* ttmn = logic->player->ttmn; 
 
     for(int i = 0 ; i < ttmn->tiles_count ; ++i)
     {
@@ -129,9 +145,8 @@ int GL_CheckWallCollision(GameLogic *logic)
 
 
 
-int GL_CheckTileCollision(GameLogic *logic)
+int GL_CheckTileCollision(GameLogic *logic, Tetrimino *ttmn)
 {
-    Tetrimino *ttmn = logic->player->ttmn;
     Grid* grid = logic->grid;
 
     for(int i = 0 ; i < ttmn->tiles_count ; ++i)
@@ -296,6 +311,9 @@ void GL_PopQueue(GameLogic *logic)
     // add a new tetrimino to the queue
 
     logic->queue[logic->queue_size - 1] = TTMN_CreateRand(0,0);
+
+    // update shadow
+    GL_UpdateLandingShadow(logic);
 }
 
 void GL_StartSoftDrop(GameLogic* logic)
@@ -311,4 +329,24 @@ void GL_StopSoftDrop(GameLogic* logic)
 void GL_HardDrop(GameLogic* logic)
 {
     // to do après implémentation du ghost
+}
+
+void GL_UpdateLandingShadow(GameLogic *logic)
+{
+    // make a copy of player's tetrimino
+    Tetrimino* shadow = logic->landing_shadow;
+    Tetrimino* player = logic->player->ttmn;
+    memcpy(shadow, player, sizeof(Tetrimino));
+    shadow->color = TILE_GREY;
+
+    while(!GL_CheckWallCollision(logic, shadow) && !GL_CheckTileCollision(logic, shadow))
+    {
+        shadow->y++;
+    }
+    shadow->y--;
+}
+
+Tetrimino* GL_GetLandingShadow(GameLogic* logic)
+{
+    return logic->landing_shadow;
 }

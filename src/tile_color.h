@@ -10,7 +10,8 @@ typedef enum
     TILE_ORANGE,
     TILE_BLUE,
     TILE_RED,
-    TILE_GREEN
+    TILE_GREEN,
+    TILE_GREY // used for shadow
 } TileColor;
 
 #endif

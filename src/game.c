@@ -98,6 +98,13 @@ void Game_Render(Game *game)
     SDL_QueryTexture(game->gridTexture, NULL, NULL, &rect.w, &rect.h);
     SDL_RenderCopy(gRenderer, game->gridTexture, NULL, &rect);
 
+    // render shadow
+
+    Tetrimino* shadow = GL_GetLandingShadow(game->gamelogic);
+    int shadow_x = shadow->x * game->tile_size;
+    int shadow_y = shadow->y * game->tile_size;
+    Game_RenderTTMN(game, shadow, shadow_x, shadow_y);
+
     // render player Tetrimino
 
     Tetrimino* player_ttmn = game->gamelogic->player->ttmn;    

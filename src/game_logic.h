@@ -12,6 +12,7 @@ typedef struct
     Player *player;
     Tetrimino *hold;
     Tetrimino **queue;
+    Tetrimino *landing_shadow;
 
     Timer *timer;
     int dY;
@@ -38,8 +39,8 @@ void GL_Update(GameLogic *gl);
 void GL_MovePlayer(GameLogic *gl, int dx, int dy);
 void GL_RotatePlayer(GameLogic *gl, int clockwise);
 
-int GL_CheckWallCollision(GameLogic *logic);
-int GL_CheckTileCollision(GameLogic *logic);
+int GL_CheckWallCollision(GameLogic *logic, Tetrimino* ttmn);
+int GL_CheckTileCollision(GameLogic *logic, Tetrimino* ttmn);
 
 void GL_HoldTTMN(GameLogic *logic);
 void GL_PopQueue(GameLogic *logic);
@@ -51,5 +52,8 @@ void GL_StopSoftDrop(GameLogic *logic);
 
 void GL_HardDrop(GameLogic *logic);
 
+Tetrimino* GL_GetLandingShadow(GameLogic* logic);
+
+void GL_UpdateLandingShadow(GameLogic *logic);
 
 #endif

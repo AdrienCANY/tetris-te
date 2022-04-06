@@ -53,6 +53,9 @@ void setRenderDrawColor(TileColor color)
         case TILE_GREEN:
             SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
             break;
+        case TILE_GREY:
+            SDL_SetRenderDrawColor(gRenderer, 0x30, 0x30, 0x30, 0xFF);
+            break;
     }
 }
 
