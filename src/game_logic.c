@@ -144,57 +144,69 @@ void GL_PlaceTTMN(GameLogic *logic)
 
     // update grid
 
+    int updated_rows[4];
+    int* ptr = updated_rows;
+    for(int i = 0 ; i < 4 ; updated_rows[i++] = -1);
+
     for(int i = 0 ; i < ttmn->tiles_count ; ++i)
     {
         int x = ttmn->x + ttmn->tiles[i].x;
         int y = ttmn->y + ttmn->tiles[i].y;
         Grid_SetTileColor(grid, x, y, ttmn->color);
+        
+        //check if the row 
+        if( ! in(y, updated_rows, 4) )
+            *ptr++ = y; 
+    }
+
+    // print in stdout updated rows
+    for(int i = 0 ; i < 4 ; ++i)
+    {
+        printf("updated_rows[%d] = %d\n", i, updated_rows[i]);
     }
 
     // remove completed lines
 
-    int completed_lines = 0;
-
-    for(int y = ttmn->y ; y < ttmn->y + ttmn->h ; y++)
+    for(int i = 0 ; i < 4 ; ++i)
     {
-        printf("checking for completion line n°%d\n", y);
+        int row = updated_rows[i];
+        if(row < 0)
+            break;
+        
+        printf("checking for completion line n°%d\n", row);
         int completed = 1;
 
-        // check for completed lines
+        // check if the line is completed
 
-        for(int x = 0 ; x < grid->columns ; x++)
+        for(int col = 0 ; col < grid->columns ; col++)
         {
-            if(Grid_GetTileColor(grid, x, y) == TILE_BLACK)
+            if(Grid_GetTileColor(grid, col, row) == TILE_BLACK)
             {
                 completed = 0;
                 break;
             }
         }
 
+        // if completed, collapse top rows onto it
+
         if( completed )
         {
-            completed_lines++;
-        }
-    }
+            printf("Removing line n°%d (completed)\n", row);
 
-    // shift down tiles depending on how many lines were completed (if any)
-
-    if(completed_lines)
-    {
-        // shift down values
-        for(int y = grid->rows - 1 ; y > 0 ; --y)
-        {
-            for(int x = 0 ; x < grid->columns ; x++)
+            // collapse top rows
+            for(int top_row = row-1 ; top_row >= 0 ; top_row--)
             {
-                Grid_SetTileColor(grid, x, y, Grid_GetTileColor(grid, x, y-1));
+                for(int col = 0 ; col < grid->columns ; col ++)
+                {
+                    Grid_SetTileColor(grid, col, top_row+1, Grid_GetTileColor(grid, col, top_row));
+                }
             }
-        }
 
-        // fill first line with empty tiles 
-
-        for(int x = 0 ; x < grid->columns ; x++)
-        {
-            Grid_SetTileColor(grid, x, 0, TILE_BLACK);
+            // create new blank first row
+            for(int col = 0 ; col < grid->columns ; col++)
+            {
+                Grid_SetTileColor(grid, col, 0, TILE_BLACK);
+            }
         }
     }
 

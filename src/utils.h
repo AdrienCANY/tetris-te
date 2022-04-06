@@ -7,9 +7,9 @@
 
 int min(int, int);
 int max(int, int);
+int in(int needle, int* haystack, int size);
 void setRenderDrawColor(TileColor color);
 void drawTile(int x, int y);
 void printGrid(Grid *grid);
-
 
 #endif

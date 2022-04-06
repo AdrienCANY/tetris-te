@@ -14,6 +14,16 @@ int max( int a, int b )
     return ( a > b ) ? a : b;
 }
 
+int in(int needle, int* haystack, int size)
+{
+    for(int i = 0 ; i < size ; ++i)
+    {
+        if(haystack[i] == needle)
+            return 1;
+    }
+    return 0;
+}
+
 
 void setRenderDrawColor(TileColor color)
 {
