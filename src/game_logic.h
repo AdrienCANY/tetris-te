@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "player.h"
 #include "tetrimino.h"
+#include "timer.h"
 
 typedef struct 
 {
@@ -11,11 +12,18 @@ typedef struct
     Player *player;
     Tetrimino *hold;
     Tetrimino **queue;
+
+    Timer *timer;
+    int fall;
+    int speed;
+
     int hold_allowed;
     int queue_size;
+    
     int score; 
     int level;
     int lines;
+    
     int seed;
     int grid_updated;
 } GameLogic;

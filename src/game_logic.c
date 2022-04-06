@@ -40,6 +40,12 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     logic->grid_updated = 0;
 
+    // properties for tetrimino's fall
+    logic->fall = 0;
+    logic->speed = 1;
+    logic->timer = Timer_Create();
+    Timer_Start(logic->timer);
+
     return logic;
 }
 
@@ -93,6 +99,8 @@ void GL_Destroy(GameLogic *logic)
     Grid_Destroy(logic->grid);
     if(logic -> hold != NULL)
         TTMN_Destroy(logic->hold);
+
+    Timer_Destroy(logic->timer);
 
     free(logic);
     logic = NULL;
@@ -226,7 +234,14 @@ void GL_PlaceTTMN(GameLogic *logic)
 
 void GL_Update(GameLogic *gl)
 {
-    // todo
+    float speed = 1;
+    gl->fall += speed * Timer_GetTicks(gl->timer);
+    
+    GL_MovePlayer(gl, 0, gl->fall / 1000);
+
+    gl->fall %= 1000;
+
+    Timer_Start(gl->timer);
 }
 
 void GL_HoldTTMN(GameLogic *logic)
