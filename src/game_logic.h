@@ -14,8 +14,10 @@ typedef struct
     Tetrimino **queue;
 
     Timer *timer;
-    int fall;
+    int dY;
     float speed;
+    int soft_dropping;
+    int soft_drop_speed;
 
     int hold_allowed;
     int queue_size;
@@ -43,6 +45,11 @@ void GL_HoldTTMN(GameLogic *logic);
 void GL_PopQueue(GameLogic *logic);
 
 void GL_PlaceTTMN(GameLogic *logic);
+
+void GL_StartSoftDrop(GameLogic *logic);
+void GL_StopSoftDrop(GameLogic *logic);
+
+void GL_HardDrop(GameLogic *logic);
 
 
 #endif

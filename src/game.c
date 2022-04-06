@@ -38,6 +38,9 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
 
     else if( e->type == SDL_KEYDOWN)
     {
+        SDL_Scancode code = e->key.keysym.scancode;
+        SDL_Scancode *controls = game->gamelogic->player->controls;
+
         // escape -> go back to title page
 
         if(e->key.keysym.sym == SDLK_ESCAPE)
@@ -46,16 +49,12 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
 
         // else check against player's controls
         else
-        {
-            SDL_Scancode code = e->key.keysym.scancode;
-            SDL_Scancode *controls = game->gamelogic->player->controls;
-            
+        {            
             int dx = 0, dy = 0;
 
-            if(code == controls[CONTROL_UP])
-                dy = -1;
-            else if (code == controls[CONTROL_DOWN])
-                dy = 1;
+            if(code == controls[CONTROL_SOFT_DROP])
+                GL_StartSoftDrop(game->gamelogic);         
+
             else if (code == controls[CONTROL_LEFT])
                 dx = -1;
             else if (code == controls[CONTROL_RIGHT])
@@ -70,6 +69,17 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
                 GL_MovePlayer(game->gamelogic, dx, dy);
         }
         
+    }
+
+    // key up
+
+    else if (e->type == SDL_KEYUP)
+    {
+        SDL_Scancode code = e->key.keysym.scancode;
+        SDL_Scancode *controls = game->gamelogic->player->controls;
+        
+        if( code == controls[CONTROL_SOFT_DROP] )
+            GL_StopSoftDrop(game->gamelogic);
     }
 }
 

@@ -6,20 +6,20 @@
 
 typedef enum
 {
-    CONTROL_UP,
-    CONTROL_DOWN,
     CONTROL_LEFT,
     CONTROL_RIGHT,
     CONTROL_ROTATE_CLOCKWISE,
     CONTROL_ROTATE_COUNTER_CLOCKWISE,
     CONTROL_HOLD,
-    CONTROL_LAST // only meant to get the count of controls
+    CONTROL_SOFT_DROP,
+    CONTROL_HARD_DROP,
+    CONTROL_COUNT // only meant to get the count of controls
 } Control;
 
 
 typedef struct Player {
     Tetrimino *ttmn;
-    SDL_Scancode controls[CONTROL_LAST];
+    SDL_Scancode controls[CONTROL_COUNT];
 } Player;
 
 

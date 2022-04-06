@@ -41,8 +41,10 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     logic->grid_updated = 0;
 
     // properties for tetrimino's fall
-    logic->fall = 0;
-    logic->speed = 5;
+    logic->dY = 0;
+    logic->soft_dropping = 0;
+    logic->speed = 1;
+    logic->soft_drop_speed = 8;
     logic->timer = Timer_Create();
     Timer_Start(logic->timer);
 
@@ -235,13 +237,14 @@ void GL_PlaceTTMN(GameLogic *logic)
 
 void GL_Update(GameLogic *gl)
 {
-    gl->fall += gl->speed * Timer_GetTicks(gl->timer);
+    int speed = (gl->soft_dropping ? max(gl->soft_drop_speed, gl->speed) : gl->speed);
+    gl->dY += speed * Timer_GetTicks(gl->timer) * (gl->soft_dropping ? 5 : 1 ) ;
     
     Timer_Start(gl->timer);
 
-    GL_MovePlayer(gl, 0, gl->fall / 1000);
+    GL_MovePlayer(gl, 0, gl->dY / 1000);
 
-    gl->fall %= 1000;
+    gl->dY %= 1000;
 }
 
 void GL_HoldTTMN(GameLogic *logic)
@@ -293,4 +296,19 @@ void GL_PopQueue(GameLogic *logic)
     // add a new tetrimino to the queue
 
     logic->queue[logic->queue_size - 1] = TTMN_CreateRand(0,0);
+}
+
+void GL_StartSoftDrop(GameLogic* logic)
+{
+    logic->soft_dropping = 1;    
+}
+
+void GL_StopSoftDrop(GameLogic* logic)
+{
+    logic->soft_dropping = 0;
+}
+
+void GL_HardDrop(GameLogic* logic)
+{
+    // to do après implémentation du ghost
 }

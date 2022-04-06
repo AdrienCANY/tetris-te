@@ -6,8 +6,8 @@ Player* Player_Create(Tetrimino *ttmn)
 
     player->ttmn = ttmn;
 
-    player->controls[CONTROL_UP] = SDL_SCANCODE_UP;
-    player->controls[CONTROL_DOWN] = SDL_SCANCODE_DOWN;
+    player->controls[CONTROL_SOFT_DROP] = SDL_SCANCODE_DOWN;
+    player->controls[CONTROL_HARD_DROP] = SDL_SCANCODE_RETURN;
     player->controls[CONTROL_LEFT] = SDL_SCANCODE_LEFT;
     player->controls[CONTROL_RIGHT] = SDL_SCANCODE_RIGHT;
     player->controls[CONTROL_ROTATE_CLOCKWISE] = SDL_SCANCODE_E;
