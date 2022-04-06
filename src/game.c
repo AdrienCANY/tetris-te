@@ -100,17 +100,11 @@ void Game_Render(Game *game)
 
     // render player Tetrimino
 
-    Tetrimino* player_ttmn = game->gamelogic->player->ttmn;
-    setRenderDrawColor(player_ttmn->color);
-
-    for(int i = 0 ; i < player_ttmn->tiles_count ; ++i)
-    {
-        int x = player_ttmn->x + player_ttmn->tiles[i].x;
-        int y = player_ttmn->y + player_ttmn->tiles[i].y;
-
-        SDL_Rect tile_rect = Game_GetTileRenderRect(game, x, y);
-        SDL_RenderFillRect(gRenderer, &tile_rect);
-    }
+    Tetrimino* player_ttmn = game->gamelogic->player->ttmn;    
+    
+    int player_display_x = (player_ttmn->x * game->tile_size); //+ (game->showGrid ? 1 : 0);
+    int player_display_y = (player_ttmn->y * game->tile_size); //+ (game->showGrid ? 1 : 0);
+    Game_RenderTTMN(game, player_ttmn, player_display_x, player_display_y);
 
     // unset viewport
 
@@ -232,7 +226,7 @@ SDL_Rect Game_GetTileRenderRect(Game *game, int x, int y)
         x * game->tile_size + (game->showGrid ? 1 : 0),
         y * game->tile_size + (game->showGrid ? 1 : 0),
         game->tile_size - (game->showGrid ? 1 : 0),
-        game->tile_size - (game->showGrid ? 1 : 0)  
+        game->tile_size - (game->showGrid ? 1 : 0)
     };
 
     return rect;
