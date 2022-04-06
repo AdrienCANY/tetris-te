@@ -15,7 +15,7 @@ typedef struct
 
     Timer *timer;
     int fall;
-    int speed;
+    float speed;
 
     int hold_allowed;
     int queue_size;

@@ -71,15 +71,6 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
         }
         
     }
-
-
-    // if the grid has been updated (ie if tiles have been dropped), update the grid texture
-
-    if( game->gamelogic->grid_updated )
-    {
-        Game_UpdateGridTexture(game);
-        game->gamelogic->grid_updated = 0;
-    }
 }
 
 void Game_Render(Game *game)
@@ -240,4 +231,12 @@ SDL_Rect Game_GetTileRenderRect(Game *game, int x, int y)
 void Game_Logic(Game *game)
 {
     GL_Update(game->gamelogic);
+
+    // if the grid has been updated (ie if tiles have been dropped), update the grid texture
+
+    if( game->gamelogic->grid_updated )
+    {
+        Game_UpdateGridTexture(game);
+        game->gamelogic->grid_updated = 0;
+    }
 }

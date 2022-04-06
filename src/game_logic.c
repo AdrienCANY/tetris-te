@@ -42,7 +42,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     // properties for tetrimino's fall
     logic->fall = 0;
-    logic->speed = 1;
+    logic->speed = 5;
     logic->timer = Timer_Create();
     Timer_Start(logic->timer);
 
@@ -67,7 +67,7 @@ void GL_MovePlayer(GameLogic *gl, int dx, int dy)
     if( GL_CheckWallCollision(gl) || GL_CheckTileCollision(gl) )
     {
         TTMN_Move(gl->player->ttmn, 0, - dy);
-        // printf("Vertical collision detected !!\n");
+        printf("Vertical collision detected !!\n");
 
         GL_PlaceTTMN(gl);
     }
@@ -149,6 +149,7 @@ void GL_PlaceTTMN(GameLogic *logic)
 {
     Tetrimino* ttmn = logic->player->ttmn;
     Grid* grid = logic->grid;
+    
 
     // update grid
 
@@ -234,14 +235,13 @@ void GL_PlaceTTMN(GameLogic *logic)
 
 void GL_Update(GameLogic *gl)
 {
-    float speed = 1;
-    gl->fall += speed * Timer_GetTicks(gl->timer);
+    gl->fall += gl->speed * Timer_GetTicks(gl->timer);
     
+    Timer_Start(gl->timer);
+
     GL_MovePlayer(gl, 0, gl->fall / 1000);
 
     gl->fall %= 1000;
-
-    Timer_Start(gl->timer);
 }
 
 void GL_HoldTTMN(GameLogic *logic)
