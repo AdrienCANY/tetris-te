@@ -16,12 +16,10 @@ Game* Game_Create()
     Game_UpdateGridTexture(game);
 
     // texts
-    int next_x = game->grid_w + 250;
-    int next_y = 100;
-    game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, next_x, next_y, 100, 20); 
+    game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, 400, 100, 200, 20); 
 
-    game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 50, 0, 100, 200, 20);
-    game->promptTexture = Texture_CreateFromText("Hello world!", gTextFont, gWhite, 1, 100, 500, 600, 100 );
+    game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 0, 0, 100, 200, 20);
+    game->promptTexture = Texture_CreateFromText("Hello world!", gTextFont, gWhite, 0, 50, 500, 700, 100 );
 
     return game;
 }
