@@ -46,9 +46,12 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     logic->speed = 1;
     logic->soft_drop_speed = 6;
     logic->timer = Timer_Create();
-    Timer_Start(logic->timer);
     logic->landing_shadow = malloc(sizeof(Tetrimino));
     GL_UpdateLandingShadow(logic);
+
+    // states
+
+    logic->game_over = 0;
 
     return logic;
 }
@@ -252,14 +255,18 @@ void GL_PlaceTTMN(GameLogic *logic)
 
 void GL_Update(GameLogic *gl)
 {
-    int speed = (gl->soft_dropping ? max(gl->soft_drop_speed, gl->speed) : gl->speed);
-    gl->dY += speed * Timer_GetTicks(gl->timer) * (gl->soft_dropping ? 5 : 1 ) ;
-    
-    Timer_Start(gl->timer);
+    if(gl->timer->isStarted && !gl->timer->isPaused)
+    {
+        int speed = (gl->soft_dropping ? max(gl->soft_drop_speed, gl->speed) : gl->speed);
+        gl->dY += speed * Timer_GetTicks(gl->timer) * (gl->soft_dropping ? 5 : 1 ) ;
+        
+        Timer_Start(gl->timer);
 
-    GL_MovePlayer(gl, 0, gl->dY / 1000);
+        GL_MovePlayer(gl, 0, gl->dY / 1000);
 
-    gl->dY %= 1000;
+        gl->dY %= 1000;
+    }
+
 }
 
 void GL_HoldTTMN(GameLogic *logic)
@@ -351,4 +358,44 @@ void GL_UpdateLandingShadow(GameLogic *logic)
 Tetrimino* GL_GetLandingShadow(GameLogic* logic)
 {
     return logic->landing_shadow;
+}
+
+int GL_IsStarted(GameLogic* logic)
+{
+    return logic->timer->isStarted;
+}
+
+void GL_Start(GameLogic *logic)
+{
+    // start timer
+    printf("Starting game...\n");
+    Timer_Start(logic->timer);
+}
+
+int GL_IsPaused(GameLogic *logic)
+{
+    return logic->timer->isPaused;
+}
+
+void GL_Resume(GameLogic* logic)
+{
+    printf("Resuming game...\n");
+    Timer_Resume(logic->timer);
+}
+
+void GL_Pause(GameLogic *logic)
+{
+    printf("Pausing game...\n");
+    
+    Timer_Pause(logic->timer);
+}
+
+int GL_IsGameOver(GameLogic *logic)
+{
+    return logic->game_over;
+}
+
+void GL_Restart(GameLogic *logic)
+{
+    printf("Restarting game...\n");
 }

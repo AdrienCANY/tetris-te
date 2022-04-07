@@ -22,6 +22,9 @@ void Texture_LoadText(Texture* tx, char* text, int wrap)
 {
     Texture_Free(tx);
 
+    if(strlen(text) == 0)
+        return;
+
     // SDL_Surface *surface = TTF_RenderText_Blended_Wrapped(tx->font, text, tx->color, tx->outer.w);
     SDL_Surface *surface = 
         (wrap) 
@@ -73,7 +76,7 @@ void Texture_Render(Texture* texture)
 {
     SDL_SetRenderDrawColor(gRenderer, 100, 100, 100, 255);
     SDL_RenderDrawRect(gRenderer, &texture->outer);
-    SDL_RenderDrawRect(gRenderer, &texture->outer);
+    SDL_RenderDrawRect(gRenderer, &texture->inner);
     SDL_RenderCopy(gRenderer, texture->texture, NULL, &texture->inner);
 }
 

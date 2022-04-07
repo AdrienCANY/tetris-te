@@ -20,6 +20,7 @@ extern SDL_Window *gWindow;
 
 extern TTF_Font *gTitleFont;
 extern TTF_Font *gTextFont;
+extern TTF_Font *gPromptFont;
 extern SDL_Color gWhite;
 
 

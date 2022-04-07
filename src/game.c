@@ -19,7 +19,7 @@ Game* Game_Create()
     game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, 400, 100, 200, 20); 
 
     game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 0, 0, 100, 200, 20);
-    game->promptTexture = Texture_CreateFromText("Hello world!", gTextFont, gWhite, 0, 50, 500, 700, 100 );
+    game->promptTexture = Texture_CreateFromText("Press <Space> to start the game.", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
     return game;
 }
@@ -32,43 +32,79 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
     {
         gNextStateID = STATE_EXIT; // exit the program 
     }
-    
-    // key press
+
+    // key down
 
     else if( e->type == SDL_KEYDOWN)
-    {
+    {   
+        GameLogic *logic = game->gamelogic;
         SDL_Scancode code = e->key.keysym.scancode;
-        SDL_Scancode *controls = game->gamelogic->player->controls;
 
-        // escape -> go back to title page
-
-        if(e->key.keysym.sym == SDLK_ESCAPE)
-            gNextStateID = STATE_TITLE;
-
-
-        // else check against player's controls
-        else
-        {            
-            int dx = 0, dy = 0;
-
-            if(code == controls[CONTROL_SOFT_DROP])
-                GL_StartSoftDrop(game->gamelogic);         
-            else if( code == controls[CONTROL_HARD_DROP] )
-                GL_HardDrop(game->gamelogic);
-            else if (code == controls[CONTROL_LEFT])
-                dx = -1;
-            else if (code == controls[CONTROL_RIGHT])
-                dx = 1;
-            else if (code == controls[CONTROL_ROTATE_CLOCKWISE])
-                GL_RotatePlayer(game->gamelogic, 1);
-            else if (code == controls[CONTROL_ROTATE_COUNTER_CLOCKWISE])
-                GL_RotatePlayer(game->gamelogic, 0);
-            else if (code == controls[CONTROL_HOLD])
-                GL_HoldTTMN(game->gamelogic);
-            if(dx || dy)
-                GL_MovePlayer(game->gamelogic, dx, dy);
-        }
+        // game not started
         
+        if( ! GL_IsStarted(logic) &&  code == SDL_SCANCODE_SPACE )
+        {
+            if(!logic->game_over)
+                GL_Start(logic);                
+            else 
+                GL_Restart(logic);
+            Game_UpdatePromptText(game, "");
+        }
+
+        // game paused
+        else if( GL_IsPaused(logic) )
+        {
+            switch(code)
+            {
+                case SDL_SCANCODE_ESCAPE: 
+                    gNextStateID = STATE_TITLE;
+                    break;
+                case SDL_SCANCODE_SPACE:
+                    GL_Resume(logic);
+                    Game_UpdatePromptText(game, "");
+                    break;   
+            }
+        }
+
+        // game live
+
+        else
+        {
+            // pausing
+            
+            if(code == SDL_SCANCODE_ESCAPE)
+            {
+                Game_UpdatePromptText(game, "Game is paused. Press <Esc> to go back to title page or <Space> to resume the game.");
+                GL_Pause(logic);
+            }
+            
+            // inputs related to gameplay
+            
+            else
+            {
+                SDL_Scancode *controls = game->gamelogic->player->controls; 
+    
+                int dx = 0, dy = 0;
+
+                if(code == controls[CONTROL_SOFT_DROP])
+                    GL_StartSoftDrop(game->gamelogic);         
+                else if( code == controls[CONTROL_HARD_DROP] )
+                    GL_HardDrop(game->gamelogic);
+                else if (code == controls[CONTROL_LEFT])
+                    dx = -1;
+                else if (code == controls[CONTROL_RIGHT])
+                    dx = 1;
+                else if (code == controls[CONTROL_ROTATE_CLOCKWISE])
+                    GL_RotatePlayer(game->gamelogic, 1);
+                else if (code == controls[CONTROL_ROTATE_COUNTER_CLOCKWISE])
+                    GL_RotatePlayer(game->gamelogic, 0);
+                else if (code == controls[CONTROL_HOLD])
+                    GL_HoldTTMN(game->gamelogic);
+                       
+                if(dx || dy)
+                    GL_MovePlayer(game->gamelogic, dx, dy);
+            }
+        }
     }
 
     // key up
@@ -137,8 +173,6 @@ void Game_Render(Game *game)
     // render prompt
 
     Texture_Render(game->promptTexture);
-    // SDL_RenderDrawRect(gRenderer, &game->promptTexture->outer);
-    // SDL_RenderDrawRect(gRenderer, &game->promptTexture->inner);
 
 }
 
@@ -247,4 +281,15 @@ void Game_Logic(Game *game)
         Game_UpdateGridTexture(game);
         game->gamelogic->grid_updated = 0;
     }
+}
+
+void Game_UpdatePromptText(Game *game, char* text)
+{
+    Texture_LoadText(game->promptTexture, text, 1);
+}
+
+void Game_Pause(Game* game)
+{
+    Game_UpdatePromptText(game, "Game is paused. Press <Esc> to go back to title screen, or <Space> to resume.");
+    GL_Pause(game->gamelogic);
 }

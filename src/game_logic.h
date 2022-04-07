@@ -29,6 +29,9 @@ typedef struct
     
     int seed;
     int grid_updated;
+
+    int game_over;
+
 } GameLogic;
 
 GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed);
@@ -55,5 +58,13 @@ void GL_HardDrop(GameLogic *logic);
 Tetrimino* GL_GetLandingShadow(GameLogic* logic);
 
 void GL_UpdateLandingShadow(GameLogic *logic);
+
+int GL_IsStarted(GameLogic*);
+void GL_Start(GameLogic*);
+int GL_IsPaused(GameLogic*);
+void GL_Resume(GameLogic*);
+void GL_Pause(GameLogic*);
+int GL_IsGameOver(GameLogic*);
+void GL_Restart(GameLogic*);
 
 #endif

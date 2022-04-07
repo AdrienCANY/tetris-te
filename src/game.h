@@ -35,4 +35,8 @@ void Game_RenderTTMN(Game *game, Tetrimino* ttmn, int x, int y);
 
 void Game_UpdateGridTexture(Game *game);
 SDL_Rect Game_GetTileRenderRect(Game *game, int x, int y);
+void Game_UpdatePromptText(Game *game, char* text);
+
+void Game_Pause(Game *game);
+
 #endif

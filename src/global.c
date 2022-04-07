@@ -21,6 +21,7 @@ SDL_Window *gWindow;
 
 TTF_Font *gTitleFont;
 TTF_Font *gTextFont;
+TTF_Font *gPromptFont;
 SDL_Color gWhite;
 
 int Global_Init()
@@ -60,6 +61,8 @@ int Global_Init()
 
     gTitleFont = TTF_OpenFont(FONT_PATH, FONT_SIZE_TITLE);
     gTextFont = TTF_OpenFont(FONT_PATH, FONT_SIZE_TEXT);
+    gPromptFont = TTF_OpenFont(FONT_PATH, FONT_SIZE_PROMPT);
+
     gWhite.r = 0xFF;
     gWhite.g = 0xFF;
     gWhite.b = 0xFF;
@@ -132,6 +135,7 @@ void Global_Close()
 {
     TTF_CloseFont(gTitleFont);
     TTF_CloseFont(gTextFont);
+    TTF_CloseFont(gPromptFont);
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
