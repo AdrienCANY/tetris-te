@@ -20,6 +20,7 @@ typedef struct
     int grid_h;
     Texture* nextTexture;
     Texture* holdTexture;
+    Texture* promptTexture;
 } Game;
 
 Game* Game_Create();

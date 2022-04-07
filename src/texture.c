@@ -54,7 +54,7 @@ void Texture_LoadText(Texture* tx, char* text, int wrap)
         else
         {
             tx->inner.h = surface->h;
-            tx->inner.y = tx->outer.y + ( tx->outer.h - tx->outer.h ) / 2;
+            tx->inner.y = tx->outer.y + ( tx->outer.h - tx->inner.h ) / 2;
         }
     }
     SDL_FreeSurface(surface);
@@ -71,6 +71,9 @@ void Texture_Free(Texture *tx)
 
 void Texture_Render(Texture* texture)
 {
+    SDL_SetRenderDrawColor(gRenderer, 100, 100, 100, 255);
+    SDL_RenderDrawRect(gRenderer, &texture->outer);
+    SDL_RenderDrawRect(gRenderer, &texture->outer);
     SDL_RenderCopy(gRenderer, texture->texture, NULL, &texture->inner);
 }
 

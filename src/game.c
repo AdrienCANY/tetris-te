@@ -21,6 +21,7 @@ Game* Game_Create()
     game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, next_x, next_y, 100, 20); 
 
     game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 50, 0, 100, 200, 20);
+    game->promptTexture = Texture_CreateFromText("Hello world!", gTextFont, gWhite, 1, 100, 500, 600, 100 );
 
     return game;
 }
@@ -134,6 +135,13 @@ void Game_Render(Game *game)
     Texture_Render(game->holdTexture);
     if(game->gamelogic->hold != NULL)
         Game_RenderTTMN(game, game->gamelogic->hold, 50, 120);
+
+    // render prompt
+
+    Texture_Render(game->promptTexture);
+    // SDL_RenderDrawRect(gRenderer, &game->promptTexture->outer);
+    // SDL_RenderDrawRect(gRenderer, &game->promptTexture->inner);
+
 }
 
 
