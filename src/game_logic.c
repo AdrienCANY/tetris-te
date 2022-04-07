@@ -328,7 +328,9 @@ void GL_StopSoftDrop(GameLogic* logic)
 
 void GL_HardDrop(GameLogic* logic)
 {
-    // to do après implémentation du ghost
+    printf("hard dropping\n");
+    logic->player->ttmn->y = logic->landing_shadow->y;
+    GL_PlaceTTMN(logic);
 }
 
 void GL_UpdateLandingShadow(GameLogic *logic)

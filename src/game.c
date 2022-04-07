@@ -54,7 +54,8 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
 
             if(code == controls[CONTROL_SOFT_DROP])
                 GL_StartSoftDrop(game->gamelogic);         
-
+            else if( code == controls[CONTROL_HARD_DROP] )
+                GL_HardDrop(game->gamelogic);
             else if (code == controls[CONTROL_LEFT])
                 dx = -1;
             else if (code == controls[CONTROL_RIGHT])
