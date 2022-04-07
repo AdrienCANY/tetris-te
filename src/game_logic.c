@@ -11,11 +11,16 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     // seed random number generator for Tetrimino creation
     srand(seed);
 
+    // tetrimino's starting position
+
+    logic->start_x = (grid_columns / 2) - 2;
+    logic->start_y = 0;
+
     // set properties
 
     logic->grid = Grid_Create(grid_rows, grid_columns);
     
-    Tetrimino* ttmn = TTMN_CreateRand(0, 0);
+    Tetrimino* ttmn = TTMN_CreateRand(logic->start_x, logic->start_y);
     logic->player = Player_Create(ttmn);
     logic->hold = NULL;
     logic -> queue = malloc( queue_size * sizeof(Tetrimino*) );
@@ -26,7 +31,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     for(int i = 0 ; i < logic->queue_size ; ++i)
     {
-        logic -> queue[i] = TTMN_CreateRand(0,0);
+        logic -> queue[i] = TTMN_CreateRand(logic->start_x,logic->start_y);
     }
 
     // other properties
@@ -169,7 +174,12 @@ void GL_PlaceTTMN(GameLogic *logic)
 {
     Tetrimino* ttmn = logic->player->ttmn;
     Grid* grid = logic->grid;
-    
+
+    // if ttmn is at its starting position, game over 
+    if(ttmn->x == logic->start_x && ttmn->y == logic->start_y)
+    {
+        GL_GameOver(logic);
+    } 
 
     // update grid
 
@@ -317,7 +327,7 @@ void GL_PopQueue(GameLogic *logic)
 
     // add a new tetrimino to the queue
 
-    logic->queue[logic->queue_size - 1] = TTMN_CreateRand(0,0);
+    logic->queue[logic->queue_size - 1] = TTMN_CreateRand(logic->start_x,logic->start_y);
 
     // update shadow
     GL_UpdateLandingShadow(logic);
@@ -397,5 +407,13 @@ int GL_IsGameOver(GameLogic *logic)
 
 void GL_Restart(GameLogic *logic)
 {
-    printf("Restarting game...\n");
+    printf("Restarting game ...\n");
+
+    printf("GL_Restart has not been implemented yet...\n");
+}
+
+void GL_GameOver(GameLogic *logic)
+{
+    logic->game_over = 1;
+    Timer_Stop(logic->timer);
 }

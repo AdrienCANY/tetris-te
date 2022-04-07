@@ -42,13 +42,32 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
 
         // game not started
         
-        if( ! GL_IsStarted(logic) &&  code == SDL_SCANCODE_SPACE )
+        if( ! GL_IsStarted(logic))
         {
-            if(!logic->game_over)
-                GL_Start(logic);                
-            else 
-                GL_Restart(logic);
-            Game_UpdatePromptText(game, "");
+            if(GL_IsGameOver(game->gamelogic))
+            {
+                if(code == SDL_SCANCODE_SPACE)
+                {
+                    GL_Restart(game->gamelogic);
+                }
+                else if (code == SDL_SCANCODE_ESCAPE)
+                {
+                    gNextStateID = STATE_TITLE;
+                }
+            }
+            else
+            {
+                if( code == SDL_SCANCODE_SPACE )
+                {
+                    if(!logic->game_over)
+                        GL_Start(logic);                
+                    else 
+                        GL_Restart(logic);
+                    Game_UpdatePromptText(game, "");
+                }    
+            }
+            
+
         }
 
         // game paused
@@ -280,6 +299,12 @@ void Game_Logic(Game *game)
     {
         Game_UpdateGridTexture(game);
         game->gamelogic->grid_updated = 0;
+    }
+
+    // if game over
+    if(GL_IsGameOver(game->gamelogic))
+    {
+        Game_UpdatePromptText(game, "Game Over :( Press <Esc> to go back to title page or <Space> to start a new game.");
     }
 }
 

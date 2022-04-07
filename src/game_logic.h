@@ -13,6 +13,8 @@ typedef struct
     Tetrimino *hold;
     Tetrimino **queue;
     Tetrimino *landing_shadow;
+    int start_x;
+    int start_y;
 
     Timer *timer;
     int dY;
@@ -66,5 +68,6 @@ void GL_Resume(GameLogic*);
 void GL_Pause(GameLogic*);
 int GL_IsGameOver(GameLogic*);
 void GL_Restart(GameLogic*);
+void GL_GameOver(GameLogic*);
 
 #endif
