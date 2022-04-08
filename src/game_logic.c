@@ -46,6 +46,10 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     logic->game_over = 0;
 
+    // soft drop speed;
+
+    logic->soft_drop_speed = 6;
+
     // init game
 
     GL_Init(logic);

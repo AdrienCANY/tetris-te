@@ -239,7 +239,7 @@ void TTMN_Rotate(Tetrimino* ttmn, int clockwise)
 
     }
 
-    // switch w and h
+    // switch dimensions
     int w = ttmn->w;
     ttmn->w = ttmn->h;
     ttmn->h = w;

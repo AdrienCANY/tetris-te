@@ -5,6 +5,7 @@
 #include <time.h>
 #include "texture.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 Game* Game_Create()
 {
@@ -35,7 +36,7 @@ Game* Game_Create()
             3*game->tile_size
         };
     }
-    game->queueFrame.h = game->queueRects[GAME_QUEUE_SIZE-1].y + game->queueRects[GAME_QUEUE_SIZE-1].h;
+    game->queueFrame.h = game->queueRects[GAME_QUEUE_SIZE-1].y + game->queueRects[GAME_QUEUE_SIZE-1].h - game->queueFrame.y;
 
 
 
@@ -212,6 +213,9 @@ void Game_Render(Game *game)
     {
         Tetrimino* q_ttmn = game->gamelogic->queue[i];
         Game_RenderTTMN(game, q_ttmn, game->queueRects[i]);
+
+        SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
+        SDL_RenderDrawRect(gRenderer, &game->queueRects[i]);
     }
     
     // render held Tetrimino
@@ -253,13 +257,22 @@ void Game_RenderTTMN(Game *game, Tetrimino* ttmn, SDL_Rect dest)
     setRenderDrawColor(ttmn->color);
     SDL_RenderSetViewport(gRenderer, &dest);
     
-    int padding_x = ( dest.w - ( game->tile_size * ttmn->w ) ) / 2; 
-    int padding_y = ( dest.h - ( game->tile_size * ttmn->h ) ) / 2;
+    int offset_x = ttmn->tiles[0].x;
+    int offset_y = ttmn->tiles[0].y;
+
+    for(int i = 1; i < ttmn->tiles_count ; ++i)
+    {
+        offset_x = min(offset_x, ttmn->tiles[i].x);
+        offset_y = min(offset_y, ttmn->tiles[i].y);
+    }
+
+    int padding_x = ( dest.w - ( game->tile_size * (ttmn->w) ) ) / 2; 
+    int padding_y = ( dest.h - ( game->tile_size * (ttmn->h) ) ) / 2;
     SDL_Rect rect = {0};
 
     for(int i = 0 ; i < ttmn->tiles_count ; ++i)
     {
-        rect = Game_GetTileRenderRect(game, ttmn->tiles[i].x, ttmn->tiles[i].y);
+        rect = Game_GetTileRenderRect(game, ttmn->tiles[i].x - offset_x, ttmn->tiles[i].y - offset_y);
         rect.x += padding_x;
         rect.y += padding_y;
         SDL_RenderFillRect(gRenderer, &rect);
