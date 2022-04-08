@@ -14,6 +14,17 @@ Grid* Grid_Create(int rows, int columns)
     return grid;
 }
 
+void Grid_Clear(Grid* grid)
+{
+    for( int y = 0 ; y < grid->rows ; y++ )
+    {
+        for( int x = 0 ; x < grid->columns ; x++ )
+        {
+            Grid_SetTileColor(grid, x, y, TILE_BLACK);
+        }
+    }
+}
+
 
 TileColor Grid_GetTileColor(Grid *grid, int x, int y)
 {

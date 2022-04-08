@@ -70,4 +70,6 @@ int GL_IsGameOver(GameLogic*);
 void GL_Restart(GameLogic*);
 void GL_GameOver(GameLogic*);
 
+void GL_Init(GameLogic*);
+
 #endif

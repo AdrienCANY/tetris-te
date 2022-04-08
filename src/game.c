@@ -19,7 +19,7 @@ Game* Game_Create()
     game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, 400, 100, 200, 20); 
 
     game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 0, 0, 100, 200, 20);
-    game->promptTexture = Texture_CreateFromText("Press <Space> to start the game.", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
+    game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
     return game;
 }
@@ -48,6 +48,7 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
             {
                 if(code == SDL_SCANCODE_SPACE)
                 {
+                    Game_UpdatePromptText(game, "Press <Space> to start the game or <Esc> to go back to title page");
                     GL_Restart(game->gamelogic);
                 }
                 else if (code == SDL_SCANCODE_ESCAPE)

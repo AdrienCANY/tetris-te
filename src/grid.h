@@ -17,7 +17,7 @@ Grid* Grid_Create(int rows, int columns);
 TileColor Grid_GetTileColor(Grid *grid, int x, int y);
 void Grid_SetTileColor(Grid *grid, int x, int y, TileColor color);
 void Grid_Destroy(Grid *grid);
-
+void Grid_Clear(Grid* grid);
 
 
 

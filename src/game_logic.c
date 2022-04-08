@@ -7,10 +7,6 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 {
     GameLogic* logic = malloc(sizeof(GameLogic));
 
-
-    // seed random number generator for Tetrimino creation
-    srand(seed);
-
     // tetrimino's starting position
 
     logic->start_x = (grid_columns / 2) - 2;
@@ -20,45 +16,96 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     logic->grid = Grid_Create(grid_rows, grid_columns);
     
-    Tetrimino* ttmn = TTMN_CreateRand(logic->start_x, logic->start_y);
-    logic->player = Player_Create(ttmn);
+    // create player
+
+    logic->player = Player_Create();
+    
+    // set hold
+    
     logic->hold = NULL;
-    logic -> queue = malloc( queue_size * sizeof(Tetrimino*) );
+
+    // calloc tetrimino queue
+
     logic -> queue_size = 3;
-    logic->hold_allowed = 1;
-
-    // fill tetrimino queue
-
-    for(int i = 0 ; i < logic->queue_size ; ++i)
-    {
-        logic -> queue[i] = TTMN_CreateRand(logic->start_x,logic->start_y);
-    }
+    logic -> queue = calloc( sizeof(Tetrimino*), logic->queue_size );
 
     // other properties
 
-    logic->score = 0;
-    logic->level = 1;
-    logic->lines = 0;
     logic->seed = seed;
 
-    // variable for other struct to know if the grid has been updated
-
-    logic->grid_updated = 0;
-
     // properties for tetrimino's fall
-    logic->dY = 0;
-    logic->soft_dropping = 0;
-    logic->speed = 1;
-    logic->soft_drop_speed = 6;
-    logic->timer = Timer_Create();
+
     logic->landing_shadow = malloc(sizeof(Tetrimino));
-    GL_UpdateLandingShadow(logic);
+
+    // timer 
+
+    logic->timer = Timer_Create();
 
     // states
 
     logic->game_over = 0;
 
+    // init game
+
+    GL_Init(logic);
+
     return logic;
+}
+
+void GL_Init(GameLogic* logic)
+{
+    // seed the random number generator
+
+    srand(logic->seed);
+
+    // reset grid 
+
+    Grid_Clear(logic->grid);
+
+    // load new tetrimino into play
+
+    Tetrimino* player_ttmn = TTMN_CreateRand(logic->start_x, logic->start_y);
+    Player_Load(logic->player, player_ttmn);
+
+    // clear held tetrimino
+
+    if(logic->hold != NULL)
+    {
+        TTMN_Destroy(logic->hold);
+        logic->hold = NULL;
+    }
+
+    // fill tetrimino queue
+
+    for(int i = 0 ; i < logic->queue_size ; ++i)
+    {
+        if(logic->queue[i] != NULL)
+        {
+            TTMN_Destroy(logic->queue[i]);
+        }
+        logic -> queue[i] = TTMN_CreateRand(logic->start_x,logic->start_y);
+    }
+
+    // landing shadow
+
+    GL_UpdateLandingShadow(logic);
+
+    // Timer
+
+    Timer_Stop(logic->timer);
+
+    // reset various variables
+    logic->grid_updated = 1;
+    logic->game_over = 0;
+    logic->dY = 0;
+    logic->soft_dropping = 0;
+    logic->speed = 1;
+    logic->score = 0;
+    logic->level = 1;
+    logic->lines = 0;
+    logic->hold_allowed = 1;
+    
+
 }
 
 void GL_MovePlayer(GameLogic *gl, int dx, int dy)
@@ -77,9 +124,6 @@ void GL_MovePlayer(GameLogic *gl, int dx, int dy)
         GL_UpdateLandingShadow(gl);
     }
 
-    
-
-
     // vertical movement
 
     if(dy)
@@ -93,8 +137,6 @@ void GL_MovePlayer(GameLogic *gl, int dx, int dy)
             GL_PlaceTTMN(gl);
         }
     }
-
-
 
 }
 
@@ -255,7 +297,8 @@ void GL_PlaceTTMN(GameLogic *logic)
 
     // pop queue's first ttmn into play, and update rest of the queue
 
-    GL_PopQueue(logic);
+    if(!GL_IsGameOver(logic))
+        GL_PopQueue(logic);
 
     // re-allow user to hold
 
@@ -287,8 +330,6 @@ void GL_HoldTTMN(GameLogic *logic)
         return;
     }
     
-    
-
     if(logic->hold == NULL)
     {
 
@@ -305,8 +346,8 @@ void GL_HoldTTMN(GameLogic *logic)
         Tetrimino* temp = logic->hold;
         logic->hold = logic->player->ttmn;
         logic->player->ttmn = temp;
-        logic->player->ttmn->x = 0;
-        logic->player->ttmn->y = 0;
+        logic->player->ttmn->x = logic->start_x;
+        logic->player->ttmn->y = logic->start_y;
     }
     
     logic->hold_allowed = 0;
@@ -409,7 +450,7 @@ void GL_Restart(GameLogic *logic)
 {
     printf("Restarting game ...\n");
 
-    printf("GL_Restart has not been implemented yet...\n");
+    GL_Init(logic);
 }
 
 void GL_GameOver(GameLogic *logic)

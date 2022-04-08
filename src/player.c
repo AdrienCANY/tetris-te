@@ -1,10 +1,10 @@
 #include "player.h"
 
-Player* Player_Create(Tetrimino *ttmn)
+Player* Player_Create()
 {
     Player *player = malloc(sizeof(Player));
 
-    player->ttmn = ttmn;
+    player->ttmn = NULL;
 
     player->controls[CONTROL_SOFT_DROP] = SDL_SCANCODE_DOWN;
     player->controls[CONTROL_HARD_DROP] = SDL_SCANCODE_RETURN;

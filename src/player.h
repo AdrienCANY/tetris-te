@@ -23,7 +23,7 @@ typedef struct Player {
 } Player;
 
 
-Player* Player_Create(Tetrimino *ttmn);
+Player* Player_Create();
 void Player_Destroy(Player* player);
 void Player_HandleEvent(Player *player, SDL_Event *e);
 
