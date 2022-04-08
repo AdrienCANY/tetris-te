@@ -213,9 +213,6 @@ void Game_Render(Game *game)
     {
         Tetrimino* q_ttmn = game->gamelogic->queue[i];
         Game_RenderTTMN(game, q_ttmn, game->queueRects[i]);
-
-        SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
-        SDL_RenderDrawRect(gRenderer, &game->queueRects[i]);
     }
     
     // render held Tetrimino
