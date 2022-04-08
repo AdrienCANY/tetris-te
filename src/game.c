@@ -16,9 +16,13 @@ Game* Game_Create()
     Game_UpdateGridTexture(game);
 
     // texts
-    game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, 400, 100, 200, 20); 
+    game->queueFrame = (SDL_Rect) { 425, 100, 150, 200 };
+    game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, 425, 100, 150, 20); 
+    
 
-    game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 0, 0, 100, 200, 20);
+    game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 0, 25, 100, 150, 20);
+    game->holdFrame = (SDL_Rect) {25, 100, 150, 150};
+    
     game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
     return game;
@@ -183,7 +187,6 @@ void Game_Render(Game *game)
         Game_RenderTTMN(game, q_ttmn, 400, 100 +  (i+1) * (2*game->tile_size + 10));
     }
     
-
     // render held Tetrimino
 
     Texture_Render(game->holdTexture);
@@ -193,6 +196,12 @@ void Game_Render(Game *game)
     // render prompt
 
     Texture_Render(game->promptTexture);
+
+    // Render queue and hold frame
+
+    SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+    SDL_RenderDrawRect(gRenderer, &game->queueFrame);
+    SDL_RenderDrawRect(gRenderer, &game->holdFrame);
 
 }
 

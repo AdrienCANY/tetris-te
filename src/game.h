@@ -18,8 +18,15 @@ typedef struct
     SDL_Texture* gridTexture;
     int grid_w;
     int grid_h;
+
+    // queue
+    SDL_Rect queueFrame;
     Texture* nextTexture;
+
+    // hold
+    SDL_Rect holdFrame;
     Texture* holdTexture;
+    
     Texture* promptTexture;
 } Game;
 

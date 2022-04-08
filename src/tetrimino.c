@@ -23,13 +23,17 @@ Tetrimino* TTMN_Create(int x, int y, TetriminoType type)
     
     int w = ttmn->tiles[0].x;
     int h = ttmn->tiles[0].y;
+    int offset_x = ttmn->tiles[0].x;
+    int offset_y = ttmn->tiles[0].y;
     for(int i = 1; i < ttmn->tiles_count ; ++i)
     {
         w = max(w, ttmn->tiles[i].x);
         h = max(h, ttmn->tiles[i].y);
+        offset_x = min(offset_x, ttmn->tiles[i].x);
+        offset_y = min(offset_y, ttmn->tiles[i].y);
     }
-    ttmn->h = h + 1;
-    ttmn->w = w + 1;
+    ttmn->h = h - offset_y + 1;
+    ttmn->w = w - offset_x + 1;
 
     // return tetrimino
     return ttmn;
