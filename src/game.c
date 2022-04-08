@@ -15,14 +15,41 @@ Game* Game_Create()
     game->tile_size = TILE_SIZE;
     Game_UpdateGridTexture(game);
 
-    // texts
-    game->queueFrame = (SDL_Rect) { 425, 100, 150, 200 };
-    game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, 425, 100, 150, 20); 
-    
+    // queue
+    int next_text_h = 0;
+    game->queueFrame = (SDL_Rect) { 425, 100, 150, 0 };
+    game->nextTexture = Texture_CreateFromText("NEXT", gTextFont, gWhite, 0, game->queueFrame.x, game->queueFrame.y, 150, 20); 
+    SDL_QueryTexture(game->nextTexture->texture, NULL, NULL, NULL, &next_text_h);
+    game->queueRects[0] = (SDL_Rect) {
+        game->queueFrame.x,
+        game->queueFrame.y + next_text_h,
+        game->queueFrame.w,
+        3*game->tile_size
+    };
+    for(int i = 1 ; i < GAME_QUEUE_SIZE ; ++i)
+    {
+        game->queueRects[i] = (SDL_Rect){
+            game->queueFrame.x,
+            game->queueRects[i-1].y + game->queueRects[i-1].h, 
+            game->queueFrame.w,
+            3*game->tile_size
+        };
+    }
+    game->queueFrame.h = game->queueRects[GAME_QUEUE_SIZE-1].y + game->queueRects[GAME_QUEUE_SIZE-1].h;
 
-    game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 0, 25, 100, 150, 20);
+
+
+    // hold
     game->holdFrame = (SDL_Rect) {25, 100, 150, 150};
+    game->holdTexture = Texture_CreateFromText("HOLD", gTextFont, gWhite, 0, game->holdFrame.x, game->holdFrame.y, 150, 20);
+    int hold_h = 0;
+    SDL_QueryTexture(game->holdTexture->texture, NULL, NULL, NULL, &hold_h);
+    game->holdRect.y = game->holdFrame.y + hold_h;
+    game->holdRect.h = game->holdFrame.h - hold_h;
+    game->holdRect.x = game->holdFrame.x;
+    game->holdRect.w = game->holdFrame.w;
     
+    // prompt
     game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
     return game;
@@ -163,7 +190,7 @@ void Game_Render(Game *game)
     Tetrimino* shadow = GL_GetLandingShadow(game->gamelogic);
     int shadow_x = shadow->x * game->tile_size;
     int shadow_y = shadow->y * game->tile_size;
-    Game_RenderTTMN(game, shadow, shadow_x, shadow_y);
+    Game_RenderTTMN_Grid(game, shadow, shadow_x, shadow_y);
 
     // render player Tetrimino
 
@@ -171,7 +198,7 @@ void Game_Render(Game *game)
     
     int player_display_x = (player_ttmn->x * game->tile_size); //+ (game->showGrid ? 1 : 0);
     int player_display_y = (player_ttmn->y * game->tile_size); //+ (game->showGrid ? 1 : 0);
-    Game_RenderTTMN(game, player_ttmn, player_display_x, player_display_y);
+    Game_RenderTTMN_Grid(game, player_ttmn, player_display_x, player_display_y);
 
     // unset viewport
 
@@ -184,14 +211,17 @@ void Game_Render(Game *game)
     for(int i = 0 ; i < game->gamelogic->queue_size ; ++i)
     {
         Tetrimino* q_ttmn = game->gamelogic->queue[i];
-        Game_RenderTTMN(game, q_ttmn, 400, 100 +  (i+1) * (2*game->tile_size + 10));
+        Game_RenderTTMN(game, q_ttmn, game->queueRects[i]);
     }
     
     // render held Tetrimino
 
     Texture_Render(game->holdTexture);
     if(game->gamelogic->hold != NULL)
-        Game_RenderTTMN(game, game->gamelogic->hold, 50, 120);
+    {
+        Game_RenderTTMN(game, game->gamelogic->hold, game->holdRect);
+    }
+        
 
     // render prompt
 
@@ -205,8 +235,7 @@ void Game_Render(Game *game)
 
 }
 
-
-void Game_RenderTTMN(Game *game, Tetrimino* ttmn, int x, int y)
+void Game_RenderTTMN_Grid(Game *game, Tetrimino* ttmn, int x, int y)
 {
     setRenderDrawColor(ttmn->color);
     SDL_Rect rect = {0};
@@ -217,6 +246,26 @@ void Game_RenderTTMN(Game *game, Tetrimino* ttmn, int x, int y)
         rect.y += y;
         SDL_RenderFillRect(gRenderer, &rect);
     }
+}
+
+void Game_RenderTTMN(Game *game, Tetrimino* ttmn, SDL_Rect dest)
+{
+    setRenderDrawColor(ttmn->color);
+    SDL_RenderSetViewport(gRenderer, &dest);
+    
+    int padding_x = ( dest.w - ( game->tile_size * ttmn->w ) ) / 2; 
+    int padding_y = ( dest.h - ( game->tile_size * ttmn->h ) ) / 2;
+    SDL_Rect rect = {0};
+
+    for(int i = 0 ; i < ttmn->tiles_count ; ++i)
+    {
+        rect = Game_GetTileRenderRect(game, ttmn->tiles[i].x, ttmn->tiles[i].y);
+        rect.x += padding_x;
+        rect.y += padding_y;
+        SDL_RenderFillRect(gRenderer, &rect);
+    }
+
+    SDL_RenderSetViewport(gRenderer, NULL);
 }
 
 void Game_Destroy(Game *game)

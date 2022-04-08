@@ -2,6 +2,7 @@
 #include "tetrimino.h"
 #include <stdio.h>
 #include "utils.h"
+#include "constants.h"
 
 GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 {
@@ -26,7 +27,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     // calloc tetrimino queue
 
-    logic -> queue_size = 3;
+    logic -> queue_size = GAME_QUEUE_SIZE;
     logic -> queue = calloc( sizeof(Tetrimino*), logic->queue_size );
 
     // other properties

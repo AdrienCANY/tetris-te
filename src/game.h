@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "game_logic.h"
 #include "texture.h"
+#include "constants.h"
 
 typedef struct 
 {
@@ -21,10 +22,12 @@ typedef struct
 
     // queue
     SDL_Rect queueFrame;
+    SDL_Rect queueRects[GAME_QUEUE_SIZE];
     Texture* nextTexture;
 
     // hold
     SDL_Rect holdFrame;
+    SDL_Rect holdRect;
     Texture* holdTexture;
     
     Texture* promptTexture;
@@ -38,7 +41,8 @@ void Game_Destroy(Game *game);
 void Game_Logic(Game *game);
 
 
-void Game_RenderTTMN(Game *game, Tetrimino* ttmn, int x, int y);
+void Game_RenderTTMN(Game *game, Tetrimino* ttmn, SDL_Rect dest );
+void Game_RenderTTMN_Grid(Game *game, Tetrimino* ttmn, int x, int y);
 
 void Game_UpdateGridTexture(Game *game);
 SDL_Rect Game_GetTileRenderRect(Game *game, int x, int y);
