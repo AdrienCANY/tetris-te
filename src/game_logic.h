@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "player.h"
 #include "tetrimino.h"
+#include "event.h"
 #include "timer.h"
 
 typedef struct 
@@ -30,9 +31,10 @@ typedef struct
     int lines;
     
     int seed;
-    int grid_updated;
+    // int grid_updated;
 
-    int game_over;
+    // int game_over;
+    Event *event;
 
 } GameLogic;
 

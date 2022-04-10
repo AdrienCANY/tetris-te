@@ -5,6 +5,7 @@
 #include "game_logic.h"
 #include "texture.h"
 #include "constants.h"
+#include "animation.h"
 
 typedef struct 
 {
@@ -29,6 +30,9 @@ typedef struct
     SDL_Rect holdFrame;
     SDL_Rect holdRect;
     Texture* holdTexture;
+
+    // animations
+    Animation *animation;
     
     Texture* promptTexture;
 } Game;
