@@ -42,8 +42,9 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     logic->timer = Timer_Create();
 
-    // states
+    // event
 
+    logic->event = NULL;
     logic->game_over = 0;
 
     // soft drop speed;
@@ -100,8 +101,6 @@ void GL_Init(GameLogic* logic)
     Timer_Stop(logic->timer);
 
     // reset various variables
-    logic->grid_updated = 1;
-    logic->game_over = 0;
     logic->dY = 0;
     logic->soft_dropping = 0;
     logic->speed = 1;
@@ -176,6 +175,9 @@ void GL_Destroy(GameLogic *logic)
     if(logic->landing_shadow != NULL)
         TTMN_Destroy(logic->landing_shadow);
 
+    if(logic->event != NULL)
+        Event_Destroy(logic->event);
+
     free(logic);
     logic = NULL;
 }
@@ -226,7 +228,12 @@ void GL_PlaceTTMN(GameLogic *logic)
     if(ttmn->x == logic->start_x && ttmn->y == logic->start_y)
     {
         GL_GameOver(logic);
-    } 
+    }
+
+    // create event
+
+    Event* event = GL_GetEvent(logic);
+    event->type = EVENT_TETRIMINO_PLACED;
 
     // update grid
 
@@ -279,6 +286,9 @@ void GL_PlaceTTMN(GameLogic *logic)
         {
             printf("Removing line n°%d (completed)\n", row);
 
+            event->type = EVENT_LINE_COMPLETED;
+            Event_AddData(event, row);
+
             // collapse top rows
             for(int top_row = row-1 ; top_row >= 0 ; top_row--)
             {
@@ -295,10 +305,6 @@ void GL_PlaceTTMN(GameLogic *logic)
             }
         }
     }
-
-    // notify that the grid has been updated 
-
-    logic->grid_updated = 1;
 
     // pop queue's first ttmn into play, and update rest of the queue
 
@@ -455,11 +461,23 @@ void GL_Restart(GameLogic *logic)
 {
     printf("Restarting game ...\n");
 
+    Event* event = GL_GetEvent(logic);
+    event->type = EVENT_GAME_RESTART;
+
     GL_Init(logic);
 }
 
 void GL_GameOver(GameLogic *logic)
 {
+    Event* event = GL_GetEvent(logic);
+    event->type = EVENT_GAME_OVER;
     logic->game_over = 1;
     Timer_Stop(logic->timer);
+}
+
+Event* GL_GetEvent(GameLogic* logic)
+{
+    if(logic->event == NULL)
+        logic->event = Event_CreateBlank();
+    return logic->event;
 }

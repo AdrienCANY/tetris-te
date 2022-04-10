@@ -3,10 +3,10 @@
 
 typedef enum
 {
-    LINE_COMPLETED,
-    TETRIMINO_PLACED,
-    GAME_OVER,
-    GAME_RESTART
+    EVENT_LINE_COMPLETED,
+    EVENT_TETRIMINO_PLACED,
+    EVENT_GAME_OVER,
+    EVENT_GAME_RESTART
 } EventType;
 
 typedef struct 
@@ -17,6 +17,9 @@ typedef struct
 } Event;
 
 Event* Event_Create(EventType, int* data, int data_len);
+Event *Event_CreateBlank();
+void Event_RemoveData(Event *event);
+void Event_AddData(Event *event, int data);
 void Event_Destroy(Event*);
 
 #endif

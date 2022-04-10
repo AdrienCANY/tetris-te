@@ -33,7 +33,7 @@ typedef struct
     int seed;
     // int grid_updated;
 
-    // int game_over;
+    int game_over;
     Event *event;
 
 } GameLogic;
@@ -73,5 +73,7 @@ void GL_Restart(GameLogic*);
 void GL_GameOver(GameLogic*);
 
 void GL_Init(GameLogic*);
+
+Event* GL_GetEvent(GameLogic*);
 
 #endif

@@ -362,12 +362,34 @@ void Game_Logic(Game *game)
 {
     GL_Update(game->gamelogic);
 
-    // if the grid has been updated (ie if tiles have been dropped), update the grid texture
+    // handle events coming from the logic struct
 
-    if( game->gamelogic->grid_updated )
+    Event* event = game->gamelogic->event;
+
+    if( event != NULL )
     {
-        Game_UpdateGridTexture(game);
-        game->gamelogic->grid_updated = 0;
+        switch(event->type)
+        {
+            case EVENT_TETRIMINO_PLACED:
+                printf("Event: Tetrimino placed\n");
+                Game_UpdateGridTexture(game);
+                break;
+            
+            case EVENT_LINE_COMPLETED:
+                printf("Event : line completed\n");
+                Game_UpdateGridTexture(game);
+                break;
+            
+            case EVENT_GAME_OVER:
+                printf("Event: game over\n");
+                break;
+            
+            case EVENT_GAME_RESTART:
+                printf("Event: game restart\n");
+                break;
+        }
+        Event_Destroy(event);
+        game->gamelogic->event = NULL;
     }
 
     // if game over
