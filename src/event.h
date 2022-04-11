@@ -1,6 +1,8 @@
 #ifndef EVENT_H_
 #define EVENT_H_
 
+#include "tetrimino.h"
+
 typedef enum
 {
     EVENT_LINE_COMPLETED,
@@ -14,6 +16,7 @@ typedef struct
     EventType type;
     int* data;
     int data_len;
+    Tetrimino* ttmn;
 } Event;
 
 Event* Event_Create(EventType, int* data, int data_len);

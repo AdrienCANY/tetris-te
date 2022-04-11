@@ -208,6 +208,12 @@ void Game_Render(Game *game)
     // animation for line completion
     if(game->animation != NULL && game->animation->event->type == EVENT_LINE_COMPLETED)
     {
+        // draw the tetrimino that was placed (yeah we resort to that because of bad design)
+        Tetrimino* ev_ttmn = game->animation->event->ttmn;
+        Game_RenderTTMN_Grid(game, ev_ttmn, ev_ttmn->x * game->tile_size, game->tile_size * ev_ttmn->y);
+
+        // draw an expanding white rectangle on the rows to be deleted
+
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         for(int i = 0 ; i < game->animation->event->data_len ; i++)
         {
@@ -221,7 +227,7 @@ void Game_Render(Game *game)
                 game->tile_size - offset
             };
             SDL_RenderFillRect(gRenderer, &anim_rect);
-        }
+        }   
     }
 
     // unset viewport
@@ -387,7 +393,7 @@ void Game_Logic(Game *game)
 
     // handle events coming from the logic struct
 
-    Event* event = game->gamelogic->event;
+    Event* event = game->gamelogic->event; 
 
     if( event != NULL )
     {

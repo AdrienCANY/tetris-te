@@ -289,6 +289,8 @@ void GL_PlaceTTMN(GameLogic *logic)
             printf("Removing line n°%d (completed)\n", row);
 
             event->type = EVENT_LINE_COMPLETED;
+            event->ttmn = malloc(sizeof(Tetrimino));
+            memcpy(event->ttmn, logic->player->ttmn, sizeof(Tetrimino));
             Event_AddData(event, row);
 
             // collapse top rows
