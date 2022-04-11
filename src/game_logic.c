@@ -379,6 +379,8 @@ void GL_HoldTTMN(GameLogic *logic)
         logic->player->ttmn->y = logic->start_y;
     }
     
+    GL_UpdateLandingShadow(logic);
+
     logic->hold_allowed = 0;
 }
 
