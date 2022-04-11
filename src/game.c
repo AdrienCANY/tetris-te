@@ -53,6 +53,10 @@ Game* Game_Create()
     // prompt
     game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
+    // animation
+
+    game->animation = NULL;
+
     return game;
 }
 
@@ -200,6 +204,25 @@ void Game_Render(Game *game)
     int player_display_x = (player_ttmn->x * game->tile_size); //+ (game->showGrid ? 1 : 0);
     int player_display_y = (player_ttmn->y * game->tile_size); //+ (game->showGrid ? 1 : 0);
     Game_RenderTTMN_Grid(game, player_ttmn, player_display_x, player_display_y);
+
+    // animation for line completion
+    if(game->animation != NULL && game->animation->event->type == EVENT_LINE_COMPLETED)
+    {
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        for(int i = 0 ; i < game->animation->event->data_len ; i++)
+        {
+            int middle = (game->gamelogic->grid->columns/2) * game->tile_size;
+            int offset = game->showGrid ? 1 : 0;
+            int len = (game->animation->frame/5) * game->tile_size;
+            SDL_Rect anim_rect = { 
+                middle - len + offset,
+                game->animation->event->data[i] * game->tile_size + offset,
+                len * 2,
+                game->tile_size - offset
+            };
+            SDL_RenderFillRect(gRenderer, &anim_rect);
+        }
+    }
 
     // unset viewport
 
@@ -371,25 +394,49 @@ void Game_Logic(Game *game)
         switch(event->type)
         {
             case EVENT_TETRIMINO_PLACED:
-                printf("Event: Tetrimino placed\n");
+                printf("Event caught : Tetrimino placed\n");
                 Game_UpdateGridTexture(game);
+                Event_Destroy(event);
                 break;
             
             case EVENT_LINE_COMPLETED:
-                printf("Event : line completed\n");
-                Game_UpdateGridTexture(game);
+                printf("Event caught : line completed\n");
+                game->animation = Anim_Create(event);
+                GL_Pause(game->gamelogic);
                 break;
             
             case EVENT_GAME_OVER:
-                printf("Event: game over\n");
+                printf("Event caught : game over\n");
+                Event_Destroy(event);
                 break;
             
             case EVENT_GAME_RESTART:
-                printf("Event: game restart\n");
+                printf("Event caught : game restarted\n");
+                Event_Destroy(event);                
                 break;
         }
-        Event_Destroy(event);
+
+        // remove event from logic's side
         game->gamelogic->event = NULL;
+
+    }
+
+    // if an animation is ongoing
+    if(game->animation != NULL)
+    {
+        game->animation->frame++;
+        switch(game->animation->event->type)
+        {
+            case EVENT_LINE_COMPLETED:
+                if(game->animation->frame/5 > game->gamelogic->grid->columns / 2)
+                {
+                    Anim_Destroy(game->animation);
+                    game->animation = NULL;
+                    Game_UpdateGridTexture(game);
+                    GL_Resume(game->gamelogic);
+                }  
+                break;
+        }
     }
 
     // if game over

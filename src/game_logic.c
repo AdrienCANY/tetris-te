@@ -224,16 +224,18 @@ void GL_PlaceTTMN(GameLogic *logic)
     Tetrimino* ttmn = logic->player->ttmn;
     Grid* grid = logic->grid;
 
+    // Create Event
+
+    Event* event = GL_GetEvent(logic);
+    event->type = EVENT_TETRIMINO_PLACED;
+
+    
     // if ttmn is at its starting position, game over 
     if(ttmn->x == logic->start_x && ttmn->y == logic->start_y)
     {
         GL_GameOver(logic);
+        event->type = EVENT_GAME_OVER;
     }
-
-    // create event
-
-    Event* event = GL_GetEvent(logic);
-    event->type = EVENT_TETRIMINO_PLACED;
 
     // update grid
 
@@ -469,8 +471,6 @@ void GL_Restart(GameLogic *logic)
 
 void GL_GameOver(GameLogic *logic)
 {
-    Event* event = GL_GetEvent(logic);
-    event->type = EVENT_GAME_OVER;
     logic->game_over = 1;
     Timer_Stop(logic->timer);
 }
