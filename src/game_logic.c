@@ -50,6 +50,10 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     logic->soft_drop_speed = 6;
 
+    // speed increase per line completed
+
+    logic->acceleration_per_line = 0.4f;
+
     // init game
 
     GL_Init(logic);
@@ -102,10 +106,7 @@ void GL_Init(GameLogic* logic)
     // reset various variables
     logic->dY = 0;
     logic->soft_dropping = 0;
-    logic->speed = 1;
-    logic->score = 0;
-    logic->level = 1;
-    logic->lines = 0;
+    logic->lines_count = 0;
     logic->hold_allowed = 1;
     logic->game_over = 0;
     
@@ -288,6 +289,9 @@ void GL_PlaceTTMN(GameLogic *logic)
         {
             printf("Removing line n°%d (completed)\n", row);
 
+            // increment line count
+            logic->lines_count++;
+
             event->type = EVENT_LINE_COMPLETED;
             event->ttmn = malloc(sizeof(Tetrimino));
             memcpy(event->ttmn, logic->player->ttmn, sizeof(Tetrimino));
@@ -325,7 +329,8 @@ void GL_Update(GameLogic *gl)
 {
     if(gl->timer->isStarted && !gl->timer->isPaused)
     {
-        int speed = (gl->soft_dropping ? max(gl->soft_drop_speed, gl->speed) : gl->speed);
+        float speed = 1.f + (gl->acceleration_per_line * gl->lines_count);
+        speed = (gl->soft_dropping ? max(gl->soft_drop_speed, speed) : speed);
         gl->dY += speed * Timer_GetTicks(gl->timer) * (gl->soft_dropping ? 5 : 1 ) ;
         
         Timer_Start(gl->timer);

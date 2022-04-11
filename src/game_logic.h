@@ -19,16 +19,14 @@ typedef struct
 
     Timer *timer;
     int dY;
-    float speed;
+    float acceleration_per_line;
     int soft_dropping;
     int soft_drop_speed;
 
     int hold_allowed;
     int queue_size;
     
-    int score; 
-    int level;
-    int lines;
+    int lines_count;
     
     int seed;
     // int grid_updated;
