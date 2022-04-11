@@ -205,29 +205,52 @@ void Game_Render(Game *game)
     int player_display_y = (player_ttmn->y * game->tile_size); //+ (game->showGrid ? 1 : 0);
     Game_RenderTTMN_Grid(game, player_ttmn, player_display_x, player_display_y);
 
-    // animation for line completion
-    if(game->animation != NULL && game->animation->event->type == EVENT_LINE_COMPLETED)
+    // animations
+    if(game->animation != NULL)
     {
-        // draw the tetrimino that was placed (yeah we resort to that because of bad design)
-        Tetrimino* ev_ttmn = game->animation->event->ttmn;
-        Game_RenderTTMN_Grid(game, ev_ttmn, ev_ttmn->x * game->tile_size, game->tile_size * ev_ttmn->y);
-
-        // draw an expanding white rectangle on the rows to be deleted
-
-        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        for(int i = 0 ; i < game->animation->event->data_len ; i++)
+        switch(game->animation->event->type)
         {
-            int middle = (game->gamelogic->grid->columns/2) * game->tile_size;
-            int offset = game->showGrid ? 1 : 0;
-            int len = (game->animation->frame/5) * game->tile_size;
-            SDL_Rect anim_rect = { 
-                middle - len + offset,
-                game->animation->event->data[i] * game->tile_size + offset,
-                len * 2,
-                game->tile_size - offset
-            };
-            SDL_RenderFillRect(gRenderer, &anim_rect);
-        }   
+            case EVENT_LINE_COMPLETED:
+                
+                // draw the tetrimino that was placed (yeah we resort to that because of bad design)
+                Tetrimino* ev_ttmn = game->animation->event->ttmn;
+                Game_RenderTTMN_Grid(game, ev_ttmn, ev_ttmn->x * game->tile_size, game->tile_size * ev_ttmn->y);
+
+                // draw an expanding white rectangle on the rows to be deleted
+
+                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                for(int i = 0 ; i < game->animation->event->data_len ; i++)
+                {
+                    int middle = (game->gamelogic->grid->columns/2) * game->tile_size;
+                    int offset = game->showGrid ? 1 : 0;
+                    int len = (game->animation->frame/5) * game->tile_size;
+                    SDL_Rect anim_rect = { 
+                        middle - len + offset,
+                        game->animation->event->data[i] * game->tile_size + offset,
+                        len * 2,
+                        game->tile_size - offset
+                    };
+                    SDL_RenderFillRect(gRenderer, &anim_rect);
+                }   
+                
+                break;
+            
+            case EVENT_GAME_RESTART:
+
+                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                Grid* grid = game->gamelogic->grid;
+
+                int f = game->animation->frame / 2;
+                SDL_Rect anim_rect = {
+                    0,
+                    (grid->rows - f) * game->tile_size,
+                    grid->columns * game->tile_size,
+                    f * game->tile_size
+                };
+                SDL_RenderFillRect(gRenderer, &anim_rect);
+
+                break;
+        }
     }
 
     // unset viewport
@@ -418,7 +441,7 @@ void Game_Logic(Game *game)
             
             case EVENT_GAME_RESTART:
                 printf("Event caught : game restarted\n");
-                Event_Destroy(event);                
+                game->animation = Anim_Create(event);
                 break;
         }
 
@@ -441,6 +464,18 @@ void Game_Logic(Game *game)
                     Game_UpdateGridTexture(game);
                     GL_Resume(game->gamelogic);
                 }  
+                break;
+
+            case EVENT_GAME_RESTART:
+
+                if(game->animation->frame / 2 > game->gamelogic->grid->rows)
+                {
+                    Anim_Destroy(game->animation);
+                    game->animation = NULL;
+                    Game_UpdateGridTexture(game);
+                    Game_UpdatePromptText(game, "Press <Space> to start the game or <Esc> to go back to title page");
+                }
+
                 break;
         }
     }
