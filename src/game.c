@@ -53,6 +53,11 @@ Game* Game_Create()
     // prompt
     game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
+    // line count
+    char text[15] = "";
+    sprintf(text, "LINES: %03d", game->gamelogic->lines_count);
+    game->line_count_texture = Texture_CreateFromText(text, gTextFont, gWhite, 0, 425, 475, 150, 25);
+
     // animation
 
     game->animation = NULL;
@@ -286,6 +291,10 @@ void Game_Render(Game *game)
     SDL_RenderDrawRect(gRenderer, &game->queueFrame);
     SDL_RenderDrawRect(gRenderer, &game->holdFrame);
 
+    // render line count
+
+    Texture_Render(game->line_count_texture);
+
 }
 
 void Game_RenderTTMN_Grid(Game *game, Tetrimino* ttmn, int x, int y)
@@ -334,6 +343,7 @@ void Game_Destroy(Game *game)
 {
     Texture_Destroy(game->nextTexture);
     Texture_Destroy(game->holdTexture);
+    Texture_Destroy(game->line_count_texture);
     SDL_DestroyTexture(game->gridTexture);
     GL_Destroy(game->gamelogic);
     free(game);
@@ -459,6 +469,9 @@ void Game_Logic(Game *game)
             case EVENT_LINE_COMPLETED:
                 if(game->animation->frame/5 > game->gamelogic->grid->columns / 2)
                 {
+                    char text[15] = "";
+                    sprintf(text, "LINES: %03d", game->gamelogic->lines_count);
+                    Texture_LoadText(game->line_count_texture, text, 0);
                     Anim_Destroy(game->animation);
                     game->animation = NULL;
                     Game_UpdateGridTexture(game);
@@ -473,6 +486,9 @@ void Game_Logic(Game *game)
                     Anim_Destroy(game->animation);
                     game->animation = NULL;
                     Game_UpdateGridTexture(game);
+                    char text[15] = "";
+                    sprintf(text, "LINES: %03d", game->gamelogic->lines_count);
+                    Texture_LoadText(game->line_count_texture, text, 0);
                     Game_UpdatePromptText(game, "Press <Space> to start the game or <Esc> to go back to title page");
                 }
 

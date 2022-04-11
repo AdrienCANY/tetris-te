@@ -31,10 +31,15 @@ typedef struct
     SDL_Rect holdRect;
     Texture* holdTexture;
 
+    // prompt
+    Texture* promptTexture;
+
+    // line count
+    Texture* line_count_texture;
+
     // animations
     Animation *animation;
     
-    Texture* promptTexture;
 } Game;
 
 Game* Game_Create();
