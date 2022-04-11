@@ -6,13 +6,13 @@ Player* Player_Create()
 
     player->ttmn = NULL;
 
-    player->controls[CONTROL_SOFT_DROP] = SDL_SCANCODE_DOWN;
-    player->controls[CONTROL_HARD_DROP] = SDL_SCANCODE_RETURN;
-    player->controls[CONTROL_LEFT] = SDL_SCANCODE_LEFT;
-    player->controls[CONTROL_RIGHT] = SDL_SCANCODE_RIGHT;
+    player->controls[CONTROL_SOFT_DROP] = SDL_SCANCODE_S;
+    player->controls[CONTROL_HARD_DROP] = SDL_SCANCODE_SPACE;
+    player->controls[CONTROL_LEFT] = SDL_SCANCODE_A;
+    player->controls[CONTROL_RIGHT] = SDL_SCANCODE_D;
     player->controls[CONTROL_ROTATE_CLOCKWISE] = SDL_SCANCODE_E;
     player->controls[CONTROL_ROTATE_COUNTER_CLOCKWISE] = SDL_SCANCODE_Q;
-    player->controls[CONTROL_HOLD] = SDL_SCANCODE_SPACE;
+    player->controls[CONTROL_HOLD] = SDL_SCANCODE_W;
 
     return player;
 }
