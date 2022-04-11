@@ -62,6 +62,22 @@ Game* Game_Create()
 
     game->animation = NULL;
 
+    // audio
+
+    char path[50] = "";
+
+    sprintf(path, "%s/hold.wav", AUDIO_RES_PATH);
+    game->hold_sound = Mix_LoadWAV(path);
+    
+    sprintf(path, "%s/ttmn_placed.wav", AUDIO_RES_PATH);
+    game->ttmn_placed_sound = Mix_LoadWAV(path);
+    
+    sprintf(path, "%s/game_over.wav", AUDIO_RES_PATH);
+    game->game_over_sound = Mix_LoadWAV(path);
+
+    sprintf(path, "%s/line_completed.wav", AUDIO_RES_PATH);
+    game->line_completed_sound = Mix_LoadWAV(path);
+
     return game;
 }
 
@@ -341,9 +357,15 @@ void Game_RenderTTMN(Game *game, Tetrimino* ttmn, SDL_Rect dest)
 
 void Game_Destroy(Game *game)
 {
+    Mix_FreeChunk(game->hold_sound);
+    Mix_FreeChunk(game->ttmn_placed_sound);
+    Mix_FreeChunk(game->game_over_sound);
+    Mix_FreeChunk(game->line_completed_sound);
+
     Texture_Destroy(game->nextTexture);
     Texture_Destroy(game->holdTexture);
     Texture_Destroy(game->line_count_texture);
+
     SDL_DestroyTexture(game->gridTexture);
     GL_Destroy(game->gamelogic);
     free(game);
@@ -434,6 +456,7 @@ void Game_Logic(Game *game)
         {
             case EVENT_TETRIMINO_PLACED:
                 printf("Event caught : Tetrimino placed\n");
+                Mix_PlayChannel(-1, game->ttmn_placed_sound, 0);
                 Game_UpdateGridTexture(game);
                 Event_Destroy(event);
                 break;
@@ -441,17 +464,25 @@ void Game_Logic(Game *game)
             case EVENT_LINE_COMPLETED:
                 printf("Event caught : line completed\n");
                 game->animation = Anim_Create(event);
+                Mix_PlayChannel(-1, game->line_completed_sound, 0);
                 GL_Pause(game->gamelogic);
                 break;
             
             case EVENT_GAME_OVER:
                 printf("Event caught : game over\n");
+                Mix_PlayChannel(-1, game->game_over_sound, 0);
                 Event_Destroy(event);
                 break;
             
             case EVENT_GAME_RESTART:
                 printf("Event caught : game restarted\n");
                 game->animation = Anim_Create(event);
+                break;
+
+            case EVENT_HOLD_TETRIMINO:
+                printf("Event caught: hold tetrimino\n");
+                Mix_PlayChannel(-1, game->hold_sound, 0);
+                Event_Destroy(event);
                 break;
         }
 

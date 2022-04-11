@@ -8,6 +8,8 @@
 
 #define FONT_PATH "../res/fonts/kongtext.ttf"
 
+#define AUDIO_RES_PATH "../res/audio"
+
 #define FONT_SIZE_TITLE 60
 #define FONT_SIZE_TEXT 25
 #define FONT_SIZE_PROMPT 15

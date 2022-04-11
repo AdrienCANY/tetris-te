@@ -8,7 +8,8 @@ typedef enum
     EVENT_LINE_COMPLETED,
     EVENT_TETRIMINO_PLACED,
     EVENT_GAME_OVER,
-    EVENT_GAME_RESTART
+    EVENT_GAME_RESTART,
+    EVENT_HOLD_TETRIMINO
 } EventType;
 
 typedef struct 

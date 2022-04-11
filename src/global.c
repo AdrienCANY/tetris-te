@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "title.h"
 #include "game.h"
+#include <SDL_mixer.h>
 #include <stdlib.h>
 
 // global variables related to game state
@@ -29,7 +30,7 @@ int Global_Init()
     int result = 1;
     // initializing libraries 
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
         printf("Failed to initialize SDL. Message : %s\n", SDL_GetError());
         result = 0;
@@ -57,6 +58,14 @@ int Global_Init()
         result = 0;
     }
 
+    // Initialize SDL_Mixer
+
+    if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+    {
+        printf("Failed to initialize mixer. Message %s\n", Mix_GetError());
+        result = 0;
+    }
+
     // initializing style variables
 
     gTitleFont = TTF_OpenFont(FONT_PATH, FONT_SIZE_TITLE);
@@ -75,7 +84,7 @@ int Global_Init()
     gCurrentState = (void*) Title_Create();
 
 
-    return 1;
+    return result;
 }
 
 
@@ -140,6 +149,7 @@ void Global_Close()
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
 
+    Mix_Quit();
     TTF_Quit();
     SDL_Quit();
 }

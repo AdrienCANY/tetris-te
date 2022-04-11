@@ -6,6 +6,7 @@
 #include "texture.h"
 #include "constants.h"
 #include "animation.h"
+#include <SDL_mixer.h>
 
 typedef struct 
 {
@@ -39,6 +40,13 @@ typedef struct
 
     // animations
     Animation *animation;
+
+    // audio
+
+    Mix_Chunk *hold_sound;
+    Mix_Chunk *ttmn_placed_sound;
+    Mix_Chunk *game_over_sound;
+    Mix_Chunk *line_completed_sound;
     
 } Game;
 

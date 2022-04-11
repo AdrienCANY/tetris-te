@@ -349,6 +349,9 @@ void GL_HoldTTMN(GameLogic *logic)
         printf("You can not hold now !\n");
         return;
     }
+
+    Event *event = GL_GetEvent(logic);
+    event->type = EVENT_HOLD_TETRIMINO;
     
     if(logic->hold == NULL)
     {
