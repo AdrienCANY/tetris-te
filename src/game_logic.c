@@ -287,7 +287,7 @@ void GL_PlaceTTMN(GameLogic *logic)
 
         if( completed )
         {
-            printf("Removing line n°%d (completed)\n", row);
+            printf("line n°%d completed\n", row);
 
             // increment line count
             logic->lines_count++;
@@ -296,23 +296,29 @@ void GL_PlaceTTMN(GameLogic *logic)
             event->ttmn = malloc(sizeof(Tetrimino));
             memcpy(event->ttmn, logic->player->ttmn, sizeof(Tetrimino));
             Event_AddData(event, row);
-
-            // collapse top rows
-            for(int top_row = row-1 ; top_row >= 0 ; top_row--)
-            {
-                for(int col = 0 ; col < grid->columns ; col ++)
-                {
-                    Grid_SetTileColor(grid, col, top_row+1, Grid_GetTileColor(grid, col, top_row));
-                }
-            }
-
-            // create new blank first row
-            for(int col = 0 ; col < grid->columns ; col++)
-            {
-                Grid_SetTileColor(grid, col, 0, TILE_BLACK);
-            }
         }
     }
+
+    // collapse
+    if( event->type == EVENT_LINE_COMPLETED && event->data_len > 0 )
+    {
+        int offset = 0;
+        for(int r = grid->rows ; r >= 0 ; --r)
+        {   
+            while(in(r-offset, event->data, event->data_len) && r > offset)
+            {
+                offset++;
+            }
+            for(int c = 0 ; c < grid->columns ; c++)
+            {
+                if(r>offset)
+                    Grid_SetTileColor(grid, c, r, Grid_GetTileColor(grid, c, r-offset));
+                else
+                    Grid_SetTileColor(grid, c, r, TILE_BLACK);
+            }   
+        }
+    }
+
 
     // pop queue's first ttmn into play, and update rest of the queue
 
