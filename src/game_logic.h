@@ -34,6 +34,10 @@ typedef struct
     int game_over;
     Event *event;
 
+    // game length
+
+    Timer *gamelen_timer;
+
 } GameLogic;
 
 GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed);
@@ -73,5 +77,7 @@ void GL_GameOver(GameLogic*);
 void GL_Init(GameLogic*);
 
 Event* GL_GetEvent(GameLogic*);
+
+void GL_GetGameLength(GameLogic *logic, int *m, int *s);
 
 #endif

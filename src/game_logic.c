@@ -41,6 +41,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     // timer 
 
     logic->timer = Timer_Create();
+    logic->gamelen_timer = Timer_Create();
 
     // event
 
@@ -102,6 +103,7 @@ void GL_Init(GameLogic* logic)
     // Timer
 
     Timer_Stop(logic->timer);
+    Timer_Stop(logic->gamelen_timer);
 
     // reset various variables
     logic->dY = 0;
@@ -176,6 +178,7 @@ void GL_Destroy(GameLogic *logic)
         TTMN_Destroy(logic->hold);
 
     Timer_Destroy(logic->timer);
+    Timer_Destroy(logic->gamelen_timer);
 
     if(logic->landing_shadow != NULL)
         TTMN_Destroy(logic->landing_shadow);
@@ -458,6 +461,7 @@ void GL_Start(GameLogic *logic)
     // start timer
     printf("Starting game...\n");
     Timer_Start(logic->timer);
+    Timer_Start(logic->gamelen_timer);
 }
 
 int GL_IsPaused(GameLogic *logic)
@@ -469,6 +473,7 @@ void GL_Resume(GameLogic* logic)
 {
     printf("Resuming game...\n");
     Timer_Resume(logic->timer);
+    Timer_Resume(logic->gamelen_timer);
 }
 
 void GL_Pause(GameLogic *logic)
@@ -476,6 +481,7 @@ void GL_Pause(GameLogic *logic)
     printf("Pausing game...\n");
     
     Timer_Pause(logic->timer);
+    Timer_Pause(logic->gamelen_timer);
 }
 
 int GL_IsGameOver(GameLogic *logic)
@@ -497,6 +503,7 @@ void GL_GameOver(GameLogic *logic)
 {
     logic->game_over = 1;
     Timer_Stop(logic->timer);
+    Timer_Pause(logic->gamelen_timer);
 }
 
 Event* GL_GetEvent(GameLogic* logic)
@@ -504,4 +511,11 @@ Event* GL_GetEvent(GameLogic* logic)
     if(logic->event == NULL)
         logic->event = Event_CreateBlank();
     return logic->event;
+}
+
+void GL_GetGameLength(GameLogic *logic, int *m, int *s)
+{
+    int secs = Timer_GetTicks(logic->gamelen_timer) / 1000;
+    *m = secs / 60;
+    *s = secs % 60;
 }

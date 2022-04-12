@@ -38,6 +38,10 @@ typedef struct
     // line count
     Texture* line_count_texture;
 
+    // game length
+
+    Texture *gamelen_Texture;
+
     // animations
     Animation *animation;
 

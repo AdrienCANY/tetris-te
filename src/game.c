@@ -53,6 +53,9 @@ Game* Game_Create()
     // prompt
     game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
+    // game length
+    game->gamelen_Texture = Texture_CreateFromText("", gTextFont, gWhite, 0, 425, 425, 150, 25);
+
     // line count
     char text[15] = "";
     sprintf(text, "LINES: %03d", game->gamelogic->lines_count);
@@ -316,6 +319,15 @@ void Game_Render(Game *game)
     // render line count
 
     Texture_Render(game->line_count_texture);
+
+    // render game length timer
+
+    char gamelen_str[15] = "";
+    int s = 0, m = 0;
+    GL_GetGameLength(game->gamelogic, &m, &s);
+    sprintf(gamelen_str, "TIME: %02d:%02d", m, s);
+    Texture_LoadText(game->gamelen_Texture, gamelen_str, 0);
+    Texture_Render(game->gamelen_Texture);
 
 }
 
