@@ -7,11 +7,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-Game* Game_Create()
+Game* Game_Create(int seed)
 {
     Game *game = malloc(sizeof(Game));
 
-    game->gamelogic = GL_Create(20, 10, 3, time(NULL));
+    game->gamelogic = GL_Create(20, 10, 3, seed);
     game->showGrid = 1;
     game->tile_size = TILE_SIZE;
     Game_UpdateGridTexture(game);
@@ -52,6 +52,13 @@ Game* Game_Create()
     
     // prompt
     game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
+
+    // seed texture
+
+    char* seed_str = calloc(SEED_LEN+10, sizeof(char)); 
+    sprintf(seed_str, "SEED: %s", getAlphaFromInt(game->gamelogic->seed));
+    game->seed_texture = Texture_CreateFromText(seed_str, gTextFont, gWhite, 0, 425, 370, 150, 25);
+    free(seed_str);
 
     // speed texture
 
@@ -338,6 +345,10 @@ void Game_Render(Game *game)
     // render game speed
 
     Texture_Render(game->speed_texture);
+
+    // render seed
+
+    Texture_Render(game->seed_texture);
 
 }
 

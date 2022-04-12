@@ -91,7 +91,7 @@ void printGrid(Grid *grid)
 
 char* getAlphaFromInt (int n)
 {
-    char* result = calloc(5, sizeof(char));
+    char* result = calloc(SEED_LEN+1, sizeof(char));
 
 
     char* ptr = result;
@@ -114,4 +114,9 @@ int getIntFromAlpha (char* code)
         exp *= 26;
     }
     return result;
+}
+
+char toUpper(char c)
+{
+    return c - 32;
 }

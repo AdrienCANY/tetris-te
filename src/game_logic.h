@@ -30,6 +30,7 @@ typedef struct
     int lines_count;
     
     int seed;
+    int fixed_seed;
     // int grid_updated;
 
     int game_over;

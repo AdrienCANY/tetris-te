@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "utils.h"
 #include "constants.h"
+#include "time.h"
 
 GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 {
@@ -30,10 +31,6 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
     logic -> queue_size = GAME_QUEUE_SIZE;
     logic -> queue = calloc( sizeof(Tetrimino*), logic->queue_size );
 
-    // other properties
-
-    logic->seed = seed;
-
     // properties for tetrimino's fall
 
     logic->landing_shadow = malloc(sizeof(Tetrimino));
@@ -53,7 +50,12 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     // speed increase per line completed
 
-    logic->acceleration = 0.4f;
+    logic->acceleration = 0.5f;
+
+    // seed
+
+    logic->fixed_seed = seed >= 0;
+    if ( logic->fixed_seed ) logic->seed = seed;
 
     // init game
 
@@ -66,7 +68,18 @@ void GL_Init(GameLogic* logic)
 {
     // seed the random number generator
 
-    srand(logic->seed);
+    if(! logic->fixed_seed)
+    {
+        // seed not defined => create a random one
+        int rand_seed = time(NULL) % ( getIntFromAlpha("ZZZZ") + 1);
+        logic->seed = rand_seed;
+        srand(logic->seed);
+    }
+    else 
+    {
+        // seed defined
+        srand(logic->seed);
+    }
 
     // reset grid 
 

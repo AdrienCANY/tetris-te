@@ -83,7 +83,6 @@ int Global_Init()
     gNextStateID = STATE_NULL;
     gCurrentState = (void*) Title_Create();
 
-
     return result;
 }
 
@@ -93,17 +92,22 @@ void Global_ChangeState()
     if( gNextStateID == STATE_NULL)
         return;
 
+    int seed = -1;
+
     switch(gCurrentStateID)
     {
         case STATE_TITLE: Title_Destroy( (Title*) gCurrentState ); break;
         case STATE_GAME: Game_Destroy( (Game*) gCurrentState ); break;
-        case STATE_SEED: Seed_Destroy( (Seed*) gCurrentState ); break;
+        case STATE_SEED: 
+            seed = Seed_GetSeed( (Seed*) gCurrentState );
+            Seed_Destroy( (Seed*) gCurrentState ); 
+            break;
     }
 
     switch(gNextStateID)
     {
         case STATE_TITLE: gCurrentState = (void*) Title_Create(); break;
-        case STATE_GAME: gCurrentState = (void*) Game_Create(); break;
+        case STATE_GAME: gCurrentState = (void*) Game_Create(seed); break;
         case STATE_SEED: gCurrentState = (void*) Seed_Create(); break;
     }
 

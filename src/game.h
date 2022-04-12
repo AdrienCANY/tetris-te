@@ -46,6 +46,10 @@ typedef struct
 
     Texture *gamelen_Texture;
 
+    // seed
+
+    Texture *seed_texture;
+
     // animations
     Animation *animation;
 
@@ -59,7 +63,7 @@ typedef struct
     
 } Game;
 
-Game* Game_Create();
+Game* Game_Create(int seed);
 void Game_HandleEvent(Game* game, SDL_Event *e);
 void Game_Render(Game *game);
 void Game_Destroy(Game *game);

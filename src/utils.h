@@ -15,5 +15,6 @@ void printGrid(Grid *grid);
 
 char* getAlphaFromInt (int n);
 int getIntFromAlpha (char* code);
+char toUpper(char c);
 
 #endif
