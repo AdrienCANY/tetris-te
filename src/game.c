@@ -489,7 +489,7 @@ void Game_Logic(Game *game)
                 Event_Destroy(event);
                 break;
 
-            case EVENT_HOLD_FAIL:
+            case EVENT_ACTION_IMPOSSIBLE:
                 Mix_PlayChannel(-1, game->hold_fail_sound, 0);
                 Event_Destroy(event);
                 break;
