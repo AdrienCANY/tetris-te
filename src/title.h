@@ -9,6 +9,7 @@ typedef struct
     Texture *title;
     Texture *subtitle;
     Texture *play;
+    Texture *seed;
 } Title;
 
 Title* Title_Create();

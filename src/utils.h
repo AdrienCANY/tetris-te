@@ -12,4 +12,8 @@ void setRenderDrawColor(TileColor color);
 void drawTile(int x, int y);
 void printGrid(Grid *grid);
 
+
+char* getAlphaFromInt (int n);
+int getIntFromAlpha (char* code);
+
 #endif

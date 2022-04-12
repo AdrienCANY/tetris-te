@@ -7,6 +7,7 @@
 #include "constants.h"
 #include "animation.h"
 #include <SDL_mixer.h>
+#include "seed.h"
 
 typedef struct 
 {

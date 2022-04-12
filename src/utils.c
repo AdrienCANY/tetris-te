@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "stdio.h"
 #include "constants.h"
+#include <string.h>
 
 
 int min( int a, int b )
@@ -86,4 +87,31 @@ void printGrid(Grid *grid)
         }
         printf("\n");
     }
+}
+
+char* getAlphaFromInt (int n)
+{
+    char* result = calloc(5, sizeof(char));
+
+
+    char* ptr = result;
+    while( ptr < result + 4)
+    {
+        *ptr++ = 'A' + (n % 26);
+        n /= 26;
+    }
+    strrev(result);
+    return result;
+}
+
+int getIntFromAlpha (char* code)
+{
+    int result = 0;
+    int exp = 1;
+    for(int i = strlen(code) - 1 ; i >= 0 ; --i)
+    {
+        result += (code[i] - 'A') * exp;
+        exp *= 26;
+    }
+    return result;
 }

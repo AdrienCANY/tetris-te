@@ -97,12 +97,14 @@ void Global_ChangeState()
     {
         case STATE_TITLE: Title_Destroy( (Title*) gCurrentState ); break;
         case STATE_GAME: Game_Destroy( (Game*) gCurrentState ); break;
+        case STATE_SEED: Seed_Destroy( (Seed*) gCurrentState ); break;
     }
 
     switch(gNextStateID)
     {
         case STATE_TITLE: gCurrentState = (void*) Title_Create(); break;
         case STATE_GAME: gCurrentState = (void*) Game_Create(); break;
+        case STATE_SEED: gCurrentState = (void*) Seed_Create(); break;
     }
 
     gCurrentStateID = gNextStateID;
@@ -120,6 +122,7 @@ void Global_HandleEvent()
         {
             case STATE_TITLE: Title_HandleEvent( (Title*) gCurrentState, &e ); break;
             case STATE_GAME: Game_HandleEvent( (Game*) gCurrentState, &e ); break;
+            case STATE_SEED: Seed_HandleEvent( (Seed*) gCurrentState, &e ); break;
         }
     }
 
@@ -135,6 +138,7 @@ void Global_Render()
     {
         case STATE_TITLE: Title_Render( (Title*) gCurrentState ); break;
         case STATE_GAME: Game_Render( (Game*) gCurrentState ); break;
+        case STATE_SEED: Seed_Render( (Seed*) gCurrentState ); break;
     }
 
     SDL_RenderPresent(gRenderer);
