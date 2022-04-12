@@ -38,6 +38,9 @@ typedef struct
     // line count
     Texture* line_count_texture;
 
+    // speed
+    Texture* speed_texture;
+
     // game length
 
     Texture *gamelen_Texture;

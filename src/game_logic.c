@@ -53,7 +53,7 @@ GameLogic* GL_Create(int grid_rows, int grid_columns, int queue_size, int seed)
 
     // speed increase per line completed
 
-    logic->acceleration_per_line = 0.4f;
+    logic->acceleration = 0.4f;
 
     // init game
 
@@ -111,6 +111,7 @@ void GL_Init(GameLogic* logic)
     logic->lines_count = 0;
     logic->hold_allowed = 1;
     logic->game_over = 0;
+    logic->speed = 1.f;
     
 
 }
@@ -306,6 +307,13 @@ void GL_PlaceTTMN(GameLogic *logic)
         }
     }
 
+    // increase difficulty if at least one line was completed
+
+    if( event->type == EVENT_LINE_COMPLETED)
+    {
+        logic->speed += logic->acceleration;
+    }
+
     // collapse
     if( event->type == EVENT_LINE_COMPLETED && event->data_len > 0 )
     {
@@ -342,8 +350,7 @@ void GL_Update(GameLogic *gl)
 {
     if(gl->timer->isStarted && !gl->timer->isPaused)
     {
-        float speed = 1.f + (gl->acceleration_per_line * gl->lines_count);
-        speed = (gl->soft_dropping ? max(gl->soft_drop_speed, speed) : speed);
+        float speed = (gl->soft_dropping ? max(gl->soft_drop_speed, gl->speed) : gl->speed);
         gl->dY += speed * Timer_GetTicks(gl->timer) * (gl->soft_dropping ? 5 : 1 ) ;
         
         Timer_Start(gl->timer);
@@ -518,4 +525,9 @@ void GL_GetGameLength(GameLogic *logic, int *m, int *s)
     int secs = Timer_GetTicks(logic->gamelen_timer) / 1000;
     *m = secs / 60;
     *s = secs % 60;
+}
+
+float GL_GetSpeed(GameLogic *logic)
+{
+    return logic->speed;
 }

@@ -19,7 +19,8 @@ typedef struct
 
     Timer *timer;
     int dY;
-    float acceleration_per_line;
+    float acceleration;
+    float speed;
     int soft_dropping;
     int soft_drop_speed;
 
@@ -79,5 +80,6 @@ void GL_Init(GameLogic*);
 Event* GL_GetEvent(GameLogic*);
 
 void GL_GetGameLength(GameLogic *logic, int *m, int *s);
+float GL_GetSpeed(GameLogic *logic);
 
 #endif

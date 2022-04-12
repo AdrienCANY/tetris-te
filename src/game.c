@@ -53,8 +53,14 @@ Game* Game_Create()
     // prompt
     game->promptTexture = Texture_CreateFromText("Press <Space> to start the game or <Esc> to go back to title page", gPromptFont, gWhite, 1, 100, 500, 600, 100 );
 
+    // speed texture
+
+    char speed_str[15] = "";
+    sprintf(speed_str, "SPEED: %.2f", GL_GetSpeed(game->gamelogic));
+    game->speed_texture = Texture_CreateFromText(speed_str, gTextFont, gWhite, 0, 425, 405, 150, 25);
+
     // game length
-    game->gamelen_Texture = Texture_CreateFromText("", gTextFont, gWhite, 0, 425, 425, 150, 25);
+    game->gamelen_Texture = Texture_CreateFromText("", gTextFont, gWhite, 0, 425, 440, 150, 25);
 
     // line count
     char text[15] = "";
@@ -329,6 +335,10 @@ void Game_Render(Game *game)
     Texture_LoadText(game->gamelen_Texture, gamelen_str, 0);
     Texture_Render(game->gamelen_Texture);
 
+    // render game speed
+
+    Texture_Render(game->speed_texture);
+
 }
 
 void Game_RenderTTMN_Grid(Game *game, Tetrimino* ttmn, int x, int y)
@@ -483,9 +493,19 @@ void Game_Logic(Game *game)
             
             case EVENT_LINE_COMPLETED:
                 printf("Event caught : line completed\n");
+
+                // start animation
+
                 game->animation = Anim_Create(event);
                 Mix_PlayChannel(-1, game->line_completed_sound, 0);
                 GL_Pause(game->gamelogic);
+
+                // update speed display
+
+                char speed_str[15] = "";
+                sprintf(speed_str, "SPEED: %.2f", GL_GetSpeed(game->gamelogic));
+                Texture_LoadText(game->speed_texture, speed_str, 0);
+
                 break;
             
             case EVENT_GAME_OVER:
