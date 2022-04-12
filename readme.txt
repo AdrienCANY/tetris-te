@@ -8,3 +8,4 @@ Z -> Mise en réserve
 S -> Descente rapide
 Espace -> descente instantanée
 Echap -> Pause
+G -> Activer / Désactiver l'affichage de la grille
