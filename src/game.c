@@ -148,7 +148,11 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
                     else 
                         GL_Restart(logic);
                     Game_UpdatePromptText(game, "");
-                }    
+                }   
+                else if (code == SDL_SCANCODE_ESCAPE)
+                {
+                    gNextStateID = STATE_TITLE;
+                } 
             }
             
 
