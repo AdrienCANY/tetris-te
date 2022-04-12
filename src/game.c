@@ -395,6 +395,9 @@ void Game_Destroy(Game *game)
     Texture_Destroy(game->nextTexture);
     Texture_Destroy(game->holdTexture);
     Texture_Destroy(game->line_count_texture);
+    Texture_Destroy(game->gamelen_Texture);
+    Texture_Destroy(game->promptTexture);
+    Texture_Destroy(game->speed_texture);
 
     SDL_DestroyTexture(game->gridTexture);
     GL_Destroy(game->gamelogic);
