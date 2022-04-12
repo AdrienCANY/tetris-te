@@ -208,9 +208,7 @@ void Game_Render(Game *game)
 {
     // set render viewport for grid elements
 
-    int w = game->gamelogic->grid->columns * TILE_SIZE + game->showGrid;
-    int h = game->gamelogic->grid->rows * TILE_SIZE + game->showGrid;
-    SDL_Rect viewport = {200, 100, w, h};
+    SDL_Rect viewport = {200, 100, game->grid_w, game->grid_h};
     SDL_RenderSetViewport(gRenderer, &viewport);
 
     // render grid
@@ -323,13 +321,14 @@ void Game_Render(Game *game)
 
 void Game_RenderTTMN_Grid(Game *game, Tetrimino* ttmn, int x, int y)
 {
+    int offset = ( game->showGrid ? 0 : 1);
     setRenderDrawColor(ttmn->color);
     SDL_Rect rect = {0};
     for(int i = 0 ; i < ttmn->tiles_count ; ++i)
     {
         rect = Game_GetTileRenderRect(game, ttmn->tiles[i].x, ttmn->tiles[i].y);
-        rect.x += x;
-        rect.y += y;
+        rect.x += x + offset;
+        rect.y += y + offset;
         SDL_RenderFillRect(gRenderer, &rect);
     }
 }
@@ -385,8 +384,8 @@ void Game_UpdateGridTexture(Game *game)
 {
     // Create Blank Texture
     Grid* grid = game->gamelogic->grid;
-    int w = grid->columns * game->tile_size + (game->showGrid?1:0);
-    int h = grid->rows * game->tile_size + (game->showGrid?1:0);
+    int w = grid->columns * game->tile_size + (game->showGrid?1:2);
+    int h = grid->rows * game->tile_size + (game->showGrid?1:2);
     SDL_Texture *texture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, w, h);
 
     // Set texture as render target
@@ -396,7 +395,7 @@ void Game_UpdateGridTexture(Game *game)
 
     if( game->showGrid )
     {
-        SDL_SetRenderDrawColor(gRenderer, 0x30, 0x30, 0x30, 0xFF);
+        SDL_SetRenderDrawColor(gRenderer, 0x18, 0x18, 0x18, 0xFF);
         for(int i = game->tile_size ; i < w ; i += game->tile_size)
         {
             SDL_RenderDrawLine(gRenderer, i, 0, i, h - 1);
