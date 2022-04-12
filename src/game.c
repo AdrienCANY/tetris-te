@@ -99,6 +99,13 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
     {   
         GameLogic *logic = game->gamelogic;
         SDL_Scancode code = e->key.keysym.scancode;
+        SDL_Scancode *controls = game->gamelogic->player->controls; 
+
+        if(code == controls[CONTROL_TOGGLE_GRID])
+        {
+            game->showGrid = !game->showGrid;
+            Game_UpdateGridTexture(game);
+        }
 
         // game not started
         
@@ -162,8 +169,6 @@ void Game_HandleEvent(Game* game, SDL_Event *e)
             
             else
             {
-                SDL_Scancode *controls = game->gamelogic->player->controls; 
-    
                 int dx = 0, dy = 0;
 
                 if(code == controls[CONTROL_SOFT_DROP])

@@ -13,6 +13,7 @@ Player* Player_Create()
     player->controls[CONTROL_ROTATE_CLOCKWISE] = SDL_SCANCODE_E;
     player->controls[CONTROL_ROTATE_COUNTER_CLOCKWISE] = SDL_SCANCODE_Q;
     player->controls[CONTROL_HOLD] = SDL_SCANCODE_W;
+    player->controls[CONTROL_TOGGLE_GRID] = SDL_SCANCODE_G;
 
     return player;
 }

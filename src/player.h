@@ -13,6 +13,7 @@ typedef enum
     CONTROL_HOLD,
     CONTROL_SOFT_DROP,
     CONTROL_HARD_DROP,
+    CONTROL_TOGGLE_GRID,
     CONTROL_COUNT // only meant to get the count of controls
 } Control;
 

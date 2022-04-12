@@ -1,9 +1,10 @@
 Commandes:
-Q -> déplacer vers la gauche
-D -> déplacer vers la droite
+Q -> déplacement vers la gauche
+D -> déplacement vers la droite
 E -> rotation sens horaire
 A -> rotation sens anti-horaire
-Z -> mettre de côté
-Note : Il faut avoir posé une pièce pour pouvoir le réutiliser
-S -> accélérer la descente
+Z -> Mise en réserve
+( Note : Il faut avoir posé une pièce pour pouvoir le réutiliser )
+S -> Descente rapide
 Espace -> descente instantanée
+Echap -> Pause
