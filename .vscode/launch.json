@@ -8,7 +8,7 @@
             "name": "build_and_run_sdl2",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\build\\tetriste.exe",
+            "program": "${workspaceFolder}\\build\\build.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

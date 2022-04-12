@@ -47,6 +47,7 @@ typedef struct
     Mix_Chunk *ttmn_placed_sound;
     Mix_Chunk *game_over_sound;
     Mix_Chunk *line_completed_sound;
+    Mix_Chunk *hold_fail_sound;
     
 } Game;
 

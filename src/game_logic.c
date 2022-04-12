@@ -148,7 +148,11 @@ void GL_MovePlayer(GameLogic *gl, int dx, int dy)
 void GL_RotatePlayer(GameLogic *gl, int clockwise)
 {
     TTMN_Rotate(gl->player->ttmn, clockwise);
-    if(GL_CheckWallCollision(gl, gl->player->ttmn))
+    if(GL_CheckTileCollision(gl, gl->player->ttmn))
+    {
+        printf("");
+    }
+    if( GL_CheckWallCollision(gl, gl->player->ttmn) ||  GL_CheckTileCollision(gl, gl->player->ttmn) )
     {
         TTMN_Rotate(gl->player->ttmn, !clockwise);
     }
@@ -353,6 +357,8 @@ void GL_HoldTTMN(GameLogic *logic)
     if( !logic->hold_allowed )
     {
         printf("You can not hold now !\n");
+        Event *event = GL_GetEvent(logic);
+        event->type = EVENT_HOLD_FAIL;
         return;
     }
 

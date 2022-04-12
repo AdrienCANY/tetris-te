@@ -78,6 +78,9 @@ Game* Game_Create()
     sprintf(path, "%s/line_completed.wav", AUDIO_RES_PATH);
     game->line_completed_sound = Mix_LoadWAV(path);
 
+    sprintf(path, "%s/hold_fail.wav", AUDIO_RES_PATH);
+    game->hold_fail_sound = Mix_LoadWAV(path);
+
     return game;
 }
 
@@ -360,6 +363,7 @@ void Game_Destroy(Game *game)
     Mix_FreeChunk(game->hold_sound);
     Mix_FreeChunk(game->ttmn_placed_sound);
     Mix_FreeChunk(game->game_over_sound);
+    Mix_FreeChunk(game->hold_fail_sound);
     Mix_FreeChunk(game->line_completed_sound);
 
     Texture_Destroy(game->nextTexture);
@@ -482,6 +486,11 @@ void Game_Logic(Game *game)
             case EVENT_HOLD_TETRIMINO:
                 printf("Event caught: hold tetrimino\n");
                 Mix_PlayChannel(-1, game->hold_sound, 0);
+                Event_Destroy(event);
+                break;
+
+            case EVENT_HOLD_FAIL:
+                Mix_PlayChannel(-1, game->hold_fail_sound, 0);
                 Event_Destroy(event);
                 break;
         }
