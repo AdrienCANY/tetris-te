@@ -14,7 +14,7 @@ Seed* Seed_Create()
     
     seed->seed = Texture_CreateFromText("", gTextFont, gWhite, 0, 250, 200, 300, 100);
 
-    seed->inputs = Texture_CreateFromText("<Esc> = back", gPromptFont, gWhite, 0, 100, 400, 600, 100);
+    seed->inputs = Texture_CreateFromText("<Esc> = back / <Enter> = play", gPromptFont, gWhite, 0, 100, 400, 600, 100);
 
     seed->seed_str = calloc(SEED_LEN + 1, sizeof(char));
 
