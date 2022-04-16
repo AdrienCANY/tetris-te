@@ -1,3 +1,5 @@
+L'executable est build/tetriste.exe
+
 Commandes:
 Q -> déplacement vers la gauche
 D -> déplacement vers la droite
