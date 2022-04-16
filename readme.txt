@@ -1,4 +1,4 @@
-L'executable est build/tetriste.exe
+Chemin de l'executable : build/tetriste.exe
 
 Commandes:
 Q -> déplacement vers la gauche
