@@ -11,3 +11,6 @@ S -> Descente rapide
 Espace -> descente instantanée
 Echap -> Pause
 G -> Activer / Désactiver l'affichage de la grille
+
+
+Thanks to Codeman38 (http://www.zone38.net/font/) font the font.
